@@ -24,6 +24,9 @@ The "AA_features.py" code includes physicochemical features of the 20 standard a
 
 To build the Docker image and run the container, which will automatically process the training dataset, follow these steps. Note that the process can be time-consuming and depends on your internet speed.
 
+```
 docker build -t peptidiff .
+```
+```
 docker run --rm -v /c/Users/Soleymani/Documents/GitHub/dataset:/app/code/dataset peptidiff
-
+```
