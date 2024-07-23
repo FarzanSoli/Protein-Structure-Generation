@@ -11,7 +11,7 @@ import os, sys, gemmi, json
 from Functions import Functions
 # ========================================= #
 # Define the directory path
-directory = os.path.join(os.getcwd(), 'Dataset', 'PDB_alpha_C')
+directory = os.path.join(os.getcwd(), 'dataset', 'PDB_alpha_C')
 # Create the directory if it doesn't exist
 if not os.path.exists(directory):
     os.makedirs(directory)  # Use makedirs to create intermediate directories if needed
@@ -124,7 +124,7 @@ def Extract_Coordinates(directory):
 
 if __name__ == "__main__":
     main_url = 'https://files.wwpdb.org/pub/pdb/data/biounit/PDB/divided/'
-    directory = os.path.join(os.getcwd(), 'Dataset', 'PDB_alpha_C')
+    directory = os.path.join(os.getcwd(), 'dataset', 'PDB_alpha_C')
     print('======================================')
     print('Retrieving proteins from PDB database!')
     print('======================================')
