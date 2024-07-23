@@ -28,5 +28,5 @@ To build the Docker image and run the container, which will automatically proces
 docker build -t peptidiff .
 ```
 ```
-docker run --rm -v /c/Users/Soleymani/Documents/GitHub/dataset:/app/code/dataset peptidiff
+docker run --rm -v /path/to/host:/app/code/dataset peptidiff
 ```
