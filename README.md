@@ -22,7 +22,9 @@ The "AA_features.py" code includes physicochemical features of the 20 standard a
 
 3 - Utility Functions: The Functions.py script contains essential functions for data processing, normalization, training, and other related tasks.
 
-To build the Docker image and run the container, which will automatically process the training dataset, follow these steps. Note that the process can be time-consuming and depends on your internet speed.
+To build the Docker image and run the container, which will automatically save training, validation and test datasets, follow these steps. Note that the process can be time-consuming and depends on your internet speed. These steps download the most recent dataset. 
+
+However, you can use the available dataset [alpha-carbon coordinates.][2] and run the "Protein_Backbone_Dataset.py" code locally to save the training, validation and test datasets. 
 
 ```
 docker build -t peptidiff .
