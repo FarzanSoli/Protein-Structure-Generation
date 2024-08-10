@@ -5,7 +5,7 @@ The raw datasets, [alpha-carbon coordinates.][2] and the [amino acid sequences o
  
 The "AA_features.py" code includes physicochemical features of the 20 standard amino acids. Additionally, the physicochemical features of the unknown amino acid (X) are computed using the median of the known features. Each amino acid can be encoded using their respective [physicochemical features][4] (Table 1). 
 
-Two pre-processed datasets are provided: a [backbone dictionary][5] containing 3D coordinates and a [backbone feature dictionary][6] comprising physicochemical properties. For each protein, the data in both dictionaries are normalized and padded to a specified length to ensure uniformity across the dataset.
+Two pre-processed datasets are provided: a [backbone 3-D coordinates dictionary][5] containing 3D coordinates and a [backbone feature dictionary][6] comprising physicochemical properties. For each protein, the data in both dictionaries are normalized and padded to a specified length to ensure uniformity across the dataset.
 
 [1]: https://files.wwpdb.org/pub/pdb/data/biounit/PDB/divided/
 
