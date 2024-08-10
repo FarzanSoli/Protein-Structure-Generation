@@ -5,6 +5,7 @@
  
 The "AA_features.py" code includes physicochemical features of the 20 standard amino acids. Additionally, the physicochemical features of the unknown amino acid (X) are computed using the median of the known features. Each amino acid can be encoded using their respective [physicochemical features][4]. 
 
+Two pre-processed datasets are provided: a [backbone dictionary][5] containing 3D coordinates and a [backbone feature dictionary][6] comprising physicochemical properties. For each protein, the data in both dictionaries are normalized and padded to a specified length to ensure uniformity across the dataset.
 
 [1]: https://files.wwpdb.org/pub/pdb/data/biounit/PDB/divided/
 
@@ -13,6 +14,11 @@ The "AA_features.py" code includes physicochemical features of the 20 standard a
 [3]: https://uottawa-my.sharepoint.com/personal/fsole078_uottawa_ca/_layouts/15/guestaccess.aspx?share=Eescxh5uKtRGtBtdVZ7BSc8BGGvR9GXhhaw_2mKNKMQtzg&e=EpZjyQ
 
 [4]: https://www.sciencedirect.com/science/article/pii/S2001037023000296
+
+[5]: https://uottawa-my.sharepoint.com/personal/fsole078_uottawa_ca/_layouts/15/guestaccess.aspx?share=EXbmb-xB6UFGi6GpWOW5tdQB2MfF6n5hNnI_A0W0Eohczw&e=g7Nnbv
+
+[6]: https://uottawa-my.sharepoint.com/personal/fsole078_uottawa_ca/_layouts/15/guestaccess.aspx?share=EexD4tXaEhtDkyMe_a649EQBuD_uLTAJ84BV1okvF2RRrQ&e=hNgvff
+
 
 ## To prepare the dataset for training PeptiDiff, follow these steps:
 
