@@ -1,7 +1,7 @@
 # PDB Dataset-Protein Backbone Generation
  This repository contains the codes to retrieve 3-D coordinates of the protein backbone from [PDB database][1]. 
  
- You can find the pre-processed dataset containing the [alpha-carbon coordinates.][2] and the [amino acid sequences of the proteins][3]. 
+The raw datasets, [alpha-carbon coordinates.][2] and the [amino acid sequences of the proteins][3] are available for access.
  
 The "AA_features.py" code includes physicochemical features of the 20 standard amino acids. Additionally, the physicochemical features of the unknown amino acid (X) are computed using the median of the known features. Each amino acid can be encoded using their respective [physicochemical features][4]. 
 
