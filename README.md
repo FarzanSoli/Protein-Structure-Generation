@@ -23,13 +23,13 @@ Two pre-processed datasets are provided: a [backbone 3-D coordinates dictionary]
 
 1 - Fetch Dataset: The Fetch_Dataset.py script retrieves the necessary dataset from the PDB database and extracts the files into a specified folder.
 
-2 - Process Protein Data: Next, the Protein_Backbone_Dataset.py script processes the extracted dataset. It extracts 3-D coordinates of alpha-carbons and assigns physicochemical features to each protein, utilizing functions from AA_features.py. You can customize the padding length of the protein directly within Protein_Backbone_Dataset.py. This script saves two dictionaries: one for backbone coordinates and another for backbone features. You can select which features to include by modifying the AA_features.py script.
+2 - Process Protein Data: Next, the Data_Processing.py script processes the extracted dataset. It extracts 3-D coordinates of alpha-carbons and assigns physicochemical features to each protein, utilizing functions from AA_features.py. You can customize the padding length of the protein directly within Data_Processing.py. This script saves two dictionaries: one for backbone coordinates and another for backbone features. You can select which features to include by modifying the AA_features.py script.
 
 3 - Utility Functions: The Functions.py script contains essential functions for data processing, normalization, training, and other related tasks.
 
 To build the Docker image and run the container, which will automatically save training, validation and test datasets, follow these steps. Note that the process can be time-consuming and depends on your internet speed. These steps download the most recent dataset. 
 
-However, you can use the available dataset [alpha-carbon coordinates.][2] and run the "Protein_Backbone_Dataset.py" code locally to save the training, validation and test datasets. 
+However, you can use the available dataset [alpha-carbon coordinates.][2] and run the "Data_Processing.py" code locally to save the training, validation and test datasets. 
 
 ```
 docker build -t peptidiff .
