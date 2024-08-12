@@ -92,22 +92,10 @@ Features_Dict = filter_dict_by_keys(Features, Match_keys,32)
 # Saving Backbone Coordinates -> X (Matched datasets)
 with open('Dataset/Backbone_Dict_32.pkl', 'wb') as file:
     pickle.dump(Backbone_Dict, file)
-file.close()
 # ==========================================
 # Saving Backbone Features -> h (Matched datasets)
 with open('Dataset/Backbone_Features_Dict_32.pkl', 'wb') as file:
     pickle.dump(Features_Dict, file)
-file.close()
-# ==============================================
-# =============================================================================
-# # Backbone Coordinates -> X
-# with open('Dataset/Backbone_Dict_32.pkl', 'rb') as file:
-#     Backbone_Dict = pickle.load(file)
-# # ==============================================
-# # Backbone Features -> h
-# with open('Dataset/Backbone_Features_Dict_32.pkl', 'rb') as file:
-#     Features_Dict = pickle.load(file)
-# =============================================================================
 # ==============================================
 def Data_Augmentation(N = 2):
     DATASET = []
@@ -136,4 +124,6 @@ def Data_Augmentation(N = 2):
     for file_path, data in datasets.items():
         with open(file_path, 'wb') as file:
             pickle.dump(data, file)
+
+Data_Augmentation(N = 20)
 
