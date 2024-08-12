@@ -1,14 +1,14 @@
-""" ########## Processing C-alpha files ########## """
 import os
+import math
 import torch
 import zipfile
 import numpy as np
 import gzip, shutil
 import pandas as pd 
+from torch import nn
 import networkx as nx
 from AA_features import features
 from itertools import combinations
-from scipy.spatial import distance
 from sklearn.decomposition import PCA
 # ========================================= #
 class Functions():
@@ -229,7 +229,6 @@ def Frechet_distance(Flatten_Real, Flatten_Generated):
     
     # Compute trace
     Trace_covar = np.trace(np.abs(Covar_Gen + Covar_Real - 2 * np.dot(sqrtm_Covar_Gen, sqrtm_Covar_Real)))
-    
     # Compute Frechet distance
     frech_dist = Sqrd_Euclid_Dist + Trace_covar
     return frech_dist
@@ -261,19 +260,7 @@ def align_data_with_ground_truth(real_data, gen_data):
     generated_data_reshaped = gen_data.reshape(-1, gen_data.shape[-1])
     aligned_gen = pca.transform(generated_data_reshaped)
     return normalize_coordinates(aligned_real), normalize_coordinates(aligned_gen)
-# ========================================= 
-def generate_laplacian_noise(shape, loc=0, scale=1):
-    # Create a Laplace distribution object
-    laplace_dist = torch.distributions.laplace.Laplace(loc=loc, scale=scale)
-    # Sample noise from the Laplace distribution
-    noise = laplace_dist.sample(shape)
-    return noise
-# ========================================= 
-def generate_uniform_noise(shape, low=0, high=1):
-    # Generate uniform noise tensor
-    noise = torch.rand(shape) * (high - low) + low
-    return noise
-# ========================================= 
+ ========================================= 
 def construct_graph(coords, threshold=0.1):
     """
     Construct a graph from 3D coordinates.
@@ -297,88 +284,72 @@ def construct_graph(coords, threshold=0.1):
         if dist < threshold:
             G.add_edge(u, v)
     return G
-# ========================================= 
-def graph_laplacian_spectrum(coords, threshold=0.1):
-    """
-    Compute the Laplacian spectrum of a graph.
-    
-    Parameters:
-    graph (networkx.Graph): Input graph
-    
-    Returns:
-    numpy.ndarray: The eigenvalues of the graph Laplacian
-    """
-    # Construct graph
-    G = construct_graph(coords, threshold)
-    # Compute Laplacian matrix
-    L = nx.laplacian_matrix(G).astype(float)
-    # Compute Laplacian spectrum (eigenvalues)
-    eigenvalues = np.linalg.eigvals(L.todense())
-    return np.sort(eigenvalues)
-# ========================================= 
-def compare_laplacian_spectra(coords_set1, coords_set2, threshold=0.1):
-    """
-    Compare the Laplacian spectra of two sets of 3D coordinates.
-
-    Parameters:
-    coords_set1 (numpy.ndarray): The first set of coordinates of shape (N, 32, 3)
-    coords_set2 (numpy.ndarray): The second set of coordinates of shape (N, 32, 3)
-    threshold (float): Threshold distance for edge connectivity
-
-    Returns:
-    float: A measure of similarity between the average spectra of the two sets of coordinates
-    """
-    spectra1 = [graph_laplacian_spectrum(coords, threshold) for coords in coords_set1]
-    spectra2 = [graph_laplacian_spectrum(coords, threshold) for coords in coords_set2]
-    
-    mean_spectrum1 = np.mean(spectra1, axis=0)
-    mean_spectrum2 = np.mean(spectra2, axis=0)
-    
-    return np.linalg.norm(mean_spectrum1 - mean_spectrum2)
+# =========================================
+class RandomRotation(nn.Module):
+    # -------------------------------------------
+    def __init__(self):
+      super().__init__()
+      self.angle_range = (-math.pi, math.pi)
+    # -------------------------------------------
+    def forward(self, points):
+      # Sample random rotation angles for each axis
+      rand = np.random.rand(3)
+      theta = rand * (self.angle_range[1] - self.angle_range[0]) + self.angle_range[0]
+      # -------------------------------------------
+      # Rotation matrix for X-axis rotation      
+      Rx = torch.Tensor([[np.cos(theta[0]), -np.sin(theta[0]), 0],
+                       [np.sin(theta[0]),  np.cos(theta[0]), 0],
+                       [0,                   0,             1]])
+      # -------------------------------------------    
+      # Rotation matrix for Y-axis rotation
+      Ry = torch.Tensor([[np.cos(theta[1]), 0,  np.sin(theta[1])],
+                        [0,                   1,               0],
+                        [-np.sin(theta[1]), 0,  np.cos(theta[1])]])
+      # -------------------------------------------
+      # Rotation matrix for Z-axis rotation
+      Rz = torch.Tensor([[np.cos(theta[2]), -np.sin(theta[2]), 0],
+                        [np.sin(theta[2]),  np.cos(theta[2]), 0],
+                        [0,              0,                   1]])
+      # -------------------------------------------
+      # Combine rotations for all axes (assuming intrinsic rotations)
+      rotation_matrix = np.einsum('ijk,jk->ik', np.stack([Rx, Ry, Rz]), np.eye(3))
+      # Rotate points
+      return np.einsum('bi,ij->bj', points, rotation_matrix)
 # =========================================
 # Rotation data augmntation
 def random_rotation(x):
     n_nodes, n_dims = x.shape
     angle_range = 2 * np.pi
-
     if n_dims == 2:
         theta = np.random.rand() * angle_range - np.pi
         cos_theta = np.cos(theta)
         sin_theta = np.sin(theta)
         R = np.array([[cos_theta, -sin_theta], [sin_theta, cos_theta]])
-
         x = x.T
         x = np.dot(R, x)
         x = x.T
-
     elif n_dims == 3:
-        # -------------------------------------------
-        # Rotation matrix for X-axis rotation    
+        # Build Rx
         theta = np.random.rand() * angle_range - np.pi
         cos = np.cos(theta)
         sin = np.sin(theta)
         Rx = np.array([[1, 0, 0],
                        [0, cos, -sin],
                        [0, sin, cos]])
-
-        # -------------------------------------------    
-        # Rotation matrix for Y-axis rotation
+        # Build Ry
         theta = np.random.rand() * angle_range - np.pi
         cos = np.cos(theta)
         sin = np.sin(theta)
         Ry = np.array([[cos, 0, sin],
                        [0, 1, 0],
                        [-sin, 0, cos]])
-
-        # -------------------------------------------
-        # Rotation matrix for Z-axis rotation
+        # Build Rz
         theta = np.random.rand() * angle_range - np.pi
         cos = np.cos(theta)
         sin = np.sin(theta)
         Rz = np.array([[cos, -sin, 0],
                        [sin, cos, 0],
                        [0, 0, 1]])
-
         # Apply rotations
         x = x.T
         x = np.dot(Rx, x)
@@ -387,6 +358,36 @@ def random_rotation(x):
         x = x.T
     else:
         raise Exception("Not implemented Error")
-
     return x
-# =========================================
+# ==============================================
+def linear_beta_schedule(b_0, b_T, T):
+    return torch.linspace(b_0, b_T, T)
+# ==============================================
+def cosine_beta_schedule(b_0, b_T, T):
+    steps = torch.arange(T + 1, dtype=torch.float32) / T
+    alpha_bar = torch.cos((steps + 0.008) / 1.008 * torch.pi / 2) ** 2
+    betas = torch.clip(1 - alpha_bar[1:] / alpha_bar[:-1], 0.0, 0.999)
+    return torch.clip(betas, b_0, b_T)
+# ==============================================
+def sigmoid_beta_schedule(b_0, b_T, T, sigmoid_scaling=6):
+    betas = torch.linspace(-sigmoid_scaling, sigmoid_scaling, T)
+    betas = torch.sigmoid(betas)
+    betas = (b_T - b_0) * betas + b_0
+    return betas
+# ==============================================
+# Create DataLoader with shuffle enabled
+from torch.utils.data import Dataset
+class CustomDataset(Dataset):
+    def __init__(self, data_list):
+        self.data_list = data_list
+    def __len__(self):
+        return len(self.data_list)
+    def __getitem__(self, idx):
+        return self.data_list[idx]
+# ==============================================
+def dynamic_weighting(loss1, loss2, log_var_x, log_var_f):
+    precision1 = torch.exp(-log_var_x)
+    precision2 = torch.exp(-log_var_f)
+    weighted_loss = precision1 * loss1 + precision2 * loss2 + log_var_x + log_var_f
+    return weighted_loss
+
