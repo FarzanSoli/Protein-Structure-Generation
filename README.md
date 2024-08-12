@@ -5,7 +5,7 @@ The raw datasets, [alpha-carbon coordinates.][2] and the [amino acid sequences o
  
 The "AA_features.py" code includes physicochemical features of the 20 standard amino acids. Additionally, the physicochemical features of the unknown amino acid (X) are computed using the median of the known features. Each amino acid can be encoded using their respective [physicochemical features][4] (Table 1). 
 
-Two pre-processed datasets are provided: a [backbone 3-D coordinates dictionary][5] and a [backbone feature dictionary][6] comprising physicochemical properties. For each protein, the data in both dictionaries are normalized and padded to a specified length to ensure uniformity across the dataset.
+Two pre-processed datasets are provided: a [backbone 3-D coordinates dictionary][5] and a [backbone feature dictionary][6] comprising physicochemical properties. For each [protein][7] (this file is necessary for the code), the data in both dictionaries are normalized and padded to a specified length to ensure uniformity across the dataset.
 
 [1]: https://files.wwpdb.org/pub/pdb/data/biounit/PDB/divided/
 
@@ -15,10 +15,11 @@ Two pre-processed datasets are provided: a [backbone 3-D coordinates dictionary]
 
 [4]: https://www.sciencedirect.com/science/article/pii/S2001037023000296
 
-[5]: https://uottawa-my.sharepoint.com/personal/fsole078_uottawa_ca/_layouts/15/guestaccess.aspx?share=EXbmb-xB6UFGi6GpWOW5tdQB2MfF6n5hNnI_A0W0Eohczw&e=g7Nnbv
+[5]: https://uottawa-my.sharepoint.com/personal/fsole078_uottawa_ca/_layouts/15/guestaccess.aspx?share=EaL9M84AeBlJrGhWozXEIMMBrVWLzDBBrYXpD_mJeFqDfg&e=LHQheE
 
-[6]: https://uottawa-my.sharepoint.com/personal/fsole078_uottawa_ca/_layouts/15/guestaccess.aspx?share=EexD4tXaEhtDkyMe_a649EQBuD_uLTAJ84BV1okvF2RRrQ&e=hNgvff
+[6]: https://uottawa-my.sharepoint.com/personal/fsole078_uottawa_ca/_layouts/15/guestaccess.aspx?share=EWajMPllOqRDuOFgfvucGREBJApruAi07NXg6VmuXnYX3g&e=ieN7SJ
 
+[7]: https://uottawa-my.sharepoint.com/personal/fsole078_uottawa_ca/_layouts/15/guestaccess.aspx?share=EVlsv02DPopLu6cU-24TD40BnB709sfkFJ2tIqFJThSWRQ&e=ThYndd
 
 ## To prepare the dataset for training PeptiDiff, follow these steps:
 
