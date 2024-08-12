@@ -48,7 +48,7 @@ def Encoded_Backbone_Seq(Pad_Length, Directory):
     # Directory = 'Dataset/AA_Seq_main.csv'
     AA_dataset = pd.read_csv(Directory)
     Encoded_AA = encode_CT(Pad_Length, AA_dataset)
-    with open('Dataset/Backbone_Features_32_.pkl', 'wb') as file:
+    with open('Dataset/Backbone_Features_32.pkl', 'wb') as file:
         pickle.dump(Encoded_AA, file)
 # ========================================= #
 #           Padding Protein backbone        #
@@ -90,47 +90,50 @@ Backbone_Dict = filter_dict_by_keys(Backbone, Match_keys,32)
 Features_Dict = filter_dict_by_keys(Features, Match_keys,32)
 # ==========================================
 # Saving Backbone Coordinates -> X (Matched datasets)
-with open('Dataset/Backbone_Dict_32_.pkl', 'wb') as file:
+with open('Dataset/Backbone_Dict_32.pkl', 'wb') as file:
     pickle.dump(Backbone_Dict, file)
 file.close()
 # ==========================================
 # Saving Backbone Features -> h (Matched datasets)
-with open('Dataset/Backbone_Features_Dict_32_.pkl', 'wb') as file:
+with open('Dataset/Backbone_Features_Dict_32.pkl', 'wb') as file:
     pickle.dump(Features_Dict, file)
 file.close()
-# ==========================================
-# merge normalized coordinates and their respective normalized physicochemical features
-DATASET = []
-for key in Backbone_Dict.keys():
-    DATASET.append([normalize_coordinates(Backbone_Dict[key]), Features_Dict[key]])
-    DATASET.append([normalize_coordinates(random_rotation(Backbone_Dict[key])), Features_Dict[key]])
-    DATASET.append([normalize_coordinates(random_rotation(Backbone_Dict[key])), Features_Dict[key]])
-    DATASET.append([normalize_coordinates(random_rotation(Backbone_Dict[key])), Features_Dict[key]])
-    DATASET.append([normalize_coordinates(random_rotation(Backbone_Dict[key])), Features_Dict[key]])
-    DATASET.append([normalize_coordinates(random_rotation(Backbone_Dict[key])), Features_Dict[key]])
-    DATASET.append([normalize_coordinates(random_rotation(Backbone_Dict[key])), Features_Dict[key]])
-    DATASET.append([normalize_coordinates(random_rotation(Backbone_Dict[key])), Features_Dict[key]])
-    DATASET.append([normalize_coordinates(random_rotation(Backbone_Dict[key])), Features_Dict[key]])
-    DATASET.append([normalize_coordinates(random_rotation(Backbone_Dict[key])), Features_Dict[key]])
-    DATASET.append([normalize_coordinates(random_rotation(Backbone_Dict[key])), Features_Dict[key]])
-
 # ==============================================
-# Define the sizes of each split
-train_size = int(0.8 * len(DATASET))
-val_size = int(0.1 * len(DATASET))
-test_size = len(DATASET) - train_size - val_size
-
-train_dataset = random.sample(DATASET, train_size)
-val_dataset = random.sample(DATASET, val_size)
-test_dataset = random.sample(DATASET, test_size)
-
-with open('Dataset/Train_32.pkl', 'wb') as file:
-    pickle.dump(train_dataset, file)
-file.close()
-with open('Dataset/Validation_32.pkl', 'wb') as file:
-    pickle.dump(val_dataset, file)
-file.close()
-with open('Dataset/Test_32.pkl', 'wb') as file:
-    pickle.dump(test_dataset, file)
-file.close()
+# =============================================================================
+# # Backbone Coordinates -> X
+# with open('Dataset/Backbone_Dict_32.pkl', 'rb') as file:
+#     Backbone_Dict = pickle.load(file)
+# # ==============================================
+# # Backbone Features -> h
+# with open('Dataset/Backbone_Features_Dict_32.pkl', 'rb') as file:
+#     Features_Dict = pickle.load(file)
+# =============================================================================
+# ==============================================
+def Data_Augmentation(N = 2):
+    DATASET = []
+    for key, backbone in Backbone_Dict.items():
+        normalized_coordinates = normalize_coordinates(backbone)
+        features = Features_Dict[key]
+        DATASET.append([normalized_coordinates, features])
+        for _ in range(N):
+            rotated_coordinates = normalize_coordinates(random_rotation(backbone))
+            DATASET.append([rotated_coordinates, features])
+    # ---------------------------------------
+    # Define the sizes of each split
+    train_size = int(0.8 * len(DATASET))
+    val_size = int(0.1 * len(DATASET))
+    test_size = len(DATASET) - train_size - val_size
+    # ---------------------------------------
+    train_dataset = random.sample(DATASET, train_size)
+    val_dataset = random.sample(DATASET, val_size)
+    test_dataset = random.sample(DATASET, test_size)
+    # ---------------------------------------
+    datasets = {
+        'Dataset/Train_32.pkl': train_dataset,
+        'Dataset/Validation_32.pkl': val_dataset,
+        'Dataset/Test_32.pkl': test_dataset
+        }
+    for file_path, data in datasets.items():
+        with open(file_path, 'wb') as file:
+            pickle.dump(data, file)
 
