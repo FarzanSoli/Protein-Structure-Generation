@@ -1,21 +1,15 @@
 """ ########## Processing C-alpha files ########## """
-import math
-import wget
-import copy
+import os
 import torch
-import pickle
 import zipfile
 import numpy as np
 import gzip, shutil
 import pandas as pd 
-from torch import nn
 import networkx as nx
-import os, sys, gemmi, json
 from AA_features import features
 from itertools import combinations
 from scipy.spatial import distance
 from sklearn.decomposition import PCA
-
 # ========================================= #
 class Functions():
     def __init__(self, directory):
@@ -341,8 +335,6 @@ def compare_laplacian_spectra(coords_set1, coords_set2, threshold=0.1):
     mean_spectrum2 = np.mean(spectra2, axis=0)
     
     return np.linalg.norm(mean_spectrum1 - mean_spectrum2)
-# =========================================
-
 # =========================================
 # Rotation data augmntation
 def random_rotation(x):

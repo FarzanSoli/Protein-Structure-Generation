@@ -1,13 +1,11 @@
 """ ########## Processing C-alpha files ########## """
+import os
 import wget
 import pickle
 import requests
 import pdbreader
-import numpy as np
-import pandas as pd 
 from lxml import etree
 from io import StringIO
-import os, sys, gemmi, json
 from Functions import Functions
 # ========================================= #
 # Define the directory path

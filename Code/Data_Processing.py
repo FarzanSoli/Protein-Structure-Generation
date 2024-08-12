@@ -1,12 +1,8 @@
 """ ########## Processing Protein backbone coordinates and distance matrices ########## """
 import os
-import wget
-import copy
 import torch
 import pickle
 import random
-import zipfile
-import numpy as np
 import pandas as pd 
 from Functions import Functions, random_rotation, normalize_coordinates
 # ========================================= #
