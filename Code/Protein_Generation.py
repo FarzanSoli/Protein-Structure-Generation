@@ -1,5 +1,4 @@
 """ ################## Sampling (Generation) ################## """  
-import torch
 import pickle
 import numpy as np
 from Config import config
