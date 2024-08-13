@@ -21,7 +21,7 @@ class config:
                  T=2000, 
                  eta=0, 
                  tau=1, 
-                 lr = 5e-7
+                 lr = 5e-7,
                  batch_size=256, 
                  num_layers=4, 
                  node_embed_size = 32,
