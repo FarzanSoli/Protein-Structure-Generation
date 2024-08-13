@@ -19,7 +19,7 @@ X_samples, H_samples = Sampling(trained_model, device=config().device, Samples =
 # ------------------------------------------ #
 #     Order based on positional embedding    #
 # ------------------------------------------ #
-positional_embedding = positional_embedding(config().length, config().node_embed_size)
+positional_embedding = positional_embedding(config().num_residues, config().node_embed_size)
 order = np.argsort(np.sum(positional_embedding.detach().cpu().numpy(), axis=1))
 # ------------------------------------------ #
 X_samples_ordered = []
@@ -49,11 +49,12 @@ density_coverage_features = []
 with open('Dataset/Test_32.pkl', 'rb') as file:
     Test_dataset = pickle.load(file)
 # =============================================
+num_real_instances = X_samples.shape[0]
 for i in range(len(DataLoader(CustomDataset(Test_dataset), 
                        num_real_instances, shuffle=True))):
     # -----------------------------------------
     real_coordinates.append(next(iter(DataLoader(CustomDataset(Test_dataset), 
-                           num_real_instances, shuffle=True)))[0][:,:config().length,:])
+                           num_real_instances, shuffle=True)))[0][:,:config().num_residues,:])
     real_coordinates_reshaped.append(
                            real_coordinates[-1].reshape(-1, real_coordinates[-1].shape[-1]))
     # --------------------------------------- #
@@ -70,10 +71,10 @@ for i in range(len(DataLoader(CustomDataset(Test_dataset),
     density_coverage.append(compute_prdc(
                             real_instances = aligned_real[-1],
                             generated_instances = aligned_gen[-1], 
-                            nearest_k=nearest_k))
+                            nearest_k=5))
     # =========================================
     real_features.append(next(iter(DataLoader(CustomDataset(Test_dataset), 
-                           num_real_instances, shuffle=True)))[1][:,:config().length,:])
+                           num_real_instances, shuffle=True)))[1][:,:config().num_residues,:])
     real_features_reshaped.append(real_features[-1].reshape(-1, real_features[-1].shape[-1]))
     # -----------------------------------------
     H_samples_ordered_reshaped = H_samples_ordered.reshape(-1, H_samples_ordered.shape[-1])
@@ -89,7 +90,7 @@ for i in range(len(DataLoader(CustomDataset(Test_dataset),
     density_coverage_features.append(compute_prdc(
                                     real_instances = real_features_reshaped[-1],
                                     generated_instances = H_samples_ordered_reshaped, 
-                                    nearest_k=nearest_k))
+                                    nearest_k=5))
 # =============================================
 density_coordinates = np.mean([x['density'] for x in density_coverage])
 coverage_coordinates = np.mean([x['coverage'] for x in density_coverage])
