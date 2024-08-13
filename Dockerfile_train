@@ -1,0 +1,38 @@
+# Use a slim base Python image with a specific version for consistency
+FROM python:3.10-slim as base
+
+# Set environment variables to prevent .pyc files and enable unbuffered output
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+# Install git, curl, and necessary build dependencies for Python packages
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    git \
+    curl \
+    build-essential \
+    && apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Set the working directory
+WORKDIR /app/Code
+
+# Copy the requirements file and install Python dependencies
+COPY requirements.txt /app/
+RUN python -m pip install --upgrade pip setuptools wheel && \
+    pip install --no-cache-dir -r /app/requirements.txt
+
+# Copy the application files
+COPY Code /app/Code
+
+# Copy the entry point script and make it executable
+COPY entrypoint_train.sh /entrypoint_train.sh
+RUN chmod +x /entrypoint_train.sh
+
+# Use a non-root user for security
+RUN useradd -m appuser && chown -R appuser /app
+USER appuser
+
+# Set the entry point
+ENTRYPOINT ["/entrypoint_train.sh"]
+

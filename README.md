@@ -18,6 +18,52 @@ Two pre-processed datasets are provided: a [backbone 3-D coordinates dictionary]
 
 The [training][7], [validation][8] and [testig][9] datasets are available to download. These datasets are augmented by randomly rotating the original datasets (20 times). 
 
+
+In order to fetch the dataset from PDB database, follow these steps:
+
+```
+docker build -f Dockerfile_data -t dataset_image .
+```
+```
+docker run --rm -v /path/to/host:/app/Code/Dataset dataset_image
+```
+
+
+If you'd like to use the pre-existing datasets mentioned above, please download the [backbone 3-D coordinates dictionary][5] and [backbone feature dictionary][6], then move them to the 'Dataset' folder within the 'Code' directory. After that, follow these steps to implement the training and inference processes:
+
+```
+docker build -f Dockerfile_train -t training_inference_image .
+```
+```
+docker run --rm -v /path/to/host:/app/Code training_inference_image
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 [1]: https://files.wwpdb.org/pub/pdb/data/biounit/PDB/divided/
 
 [2]: https://uottawa-my.sharepoint.com/personal/fsole078_uottawa_ca/_layouts/15/guestaccess.aspx?share=ERw4N-f4U6BNutxBZ67JtbUBF29r45VJifBIzTVFaCvcew&e=79FvMR
@@ -35,14 +81,3 @@ The [training][7], [validation][8] and [testig][9] datasets are available to dow
 [8]: https://uottawa-my.sharepoint.com/personal/fsole078_uottawa_ca/_layouts/15/guestaccess.aspx?share=ERI8YR-laKVEtW75QRXNkCwBtPkJdPAVOjir-eAEXBQPVg&e=1VsVKC
 
 [9]: https://uottawa-my.sharepoint.com/personal/fsole078_uottawa_ca/_layouts/15/guestaccess.aspx?share=ESUT9WMvnnlNjGP3QUqFl1YBKZPS4eEobvftjXk4p0BiRA&e=JbR2j3
-
-
-To build the Docker image and run the container, which will automatically save training, validation and test datasets, follow these steps. Note that the process can be time-consuming and depends on your internet speed. These steps download the most recent dataset. 
-
-
-```
-docker build -t peptidiff .
-```
-```
-docker run --rm -v /path/to/host:/app/code/dataset peptidiff
-```
