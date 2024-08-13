@@ -5,7 +5,7 @@ import numpy as np
 from EGNN import *
 from tqdm import tqdm
 from Config import config
-from Training_EGNN import Noise_Pred
+from Training_Denoizer import Noise_Pred
 from EGNN import positional_embedding
 from torch.utils.data import DataLoader
 from Density_Coverage import compute_prdc
