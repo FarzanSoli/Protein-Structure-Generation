@@ -37,7 +37,6 @@ The [training][7], [validation][8] and [testig][9] datasets are available to dow
 [9]: https://uottawa-my.sharepoint.com/personal/fsole078_uottawa_ca/_layouts/15/guestaccess.aspx?share=ESUT9WMvnnlNjGP3QUqFl1YBKZPS4eEobvftjXk4p0BiRA&e=JbR2j3
 
 
-
 To build the Docker image and run the container, which will automatically save training, validation and test datasets, follow these steps. Note that the process can be time-consuming and depends on your internet speed. These steps download the most recent dataset. 
 
 
