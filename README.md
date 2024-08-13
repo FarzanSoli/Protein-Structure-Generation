@@ -1,4 +1,4 @@
-# Dataset retrival for training from scratch
+# Dataset retrieval for training the diffusion model from scratch
 This repository contains the codes to retrieve 3-D coordinates of the protein backbone from [PDB database][1]. 
 ## To prepare the dataset for training PeptiDiff, follow these steps:
 
