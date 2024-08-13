@@ -17,9 +17,18 @@ def sigmoid_beta_schedule(b_0, b_T, T, sigmoid_scaling=6):
 # ==============================================
 class config:
     # -------------------------------------------
-    def __init__(self, T=2000, eta=0, tau=1, batch_size=256, 
-                 num_layers=4, node_embed_size = 32, edge_embed_size = 32, 
-                 b_0 = 1e-4, b_T = 4e-2, scheduling = 'cosine'):
+    def __init__(self, 
+                 T=2000, 
+                 eta=0, 
+                 tau=1, 
+                 lr = 5e-7
+                 batch_size=256, 
+                 num_layers=4, 
+                 node_embed_size = 32,
+                 edge_embed_size = 32, 
+                 b_0 = 1e-4, 
+                 b_T = 2e-2, 
+                 scheduling = 'cosine'):
         # ----------------------------------
         super(config, self).__init__()
         """
@@ -28,12 +37,13 @@ class config:
             b_0: starting value in variance schedule.
             b_T: ending value in variance schedule.
         """
-        self.device = torch.device('cuda:0')
         self.T = T
         self.b_0 = b_0
         self.b_T = b_T
+        self.learning_rate = lr
         self.batch_size = batch_size
         self.num_layers = num_layers
+        self.device = torch.device('cuda:0')
         self.edge_embed_size = edge_embed_size
         self.node_embed_size = node_embed_size
         self.num_residues = 32
@@ -55,5 +65,5 @@ class config:
                                           self.alpha_bars[:-1]])
         self.sigmas = torch.sqrt((1 - self.alpha_prev_bars) / (1 - self.alpha_bars)) * \
                       torch.sqrt(1 - (self.alpha_bars / self.alpha_prev_bars))
-
+        # --------------------------------------
 

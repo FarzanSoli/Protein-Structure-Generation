@@ -1,4 +1,3 @@
-import os
 import torch
 import pickle
 from EGNN import *
@@ -13,34 +12,33 @@ class Training_Model():
     # ========================================== #
     def __init__(self, 
                  num_epochs,
-                 Data_Aug_Folds,
-                 device = torch.device('cuda:0'), 
+                 Data_Aug_Folds, 
                  ):
         super(Training_Model, self).__init__()
-        self.device = device
         self.num_epochs = num_epochs
-        self.Data_Aug_Folds = Data_Aug_Folds
-        self.device = torch.device('cuda:0')
+        self.device = config().device
         self.length = config().num_residues
+        self.Data_Aug_Folds = Data_Aug_Folds
         # Enable anomaly detection
         torch.autograd.set_detect_anomaly(True)
         self.log_var_x = nn.Parameter(torch.zeros(()))
         self.log_var_f = nn.Parameter(torch.zeros(()))
         # ------------- Load Dataset ------------- #
-        Data_Processing(self.Data_Aug_Folds).Data_Augmentation()
+        Data_Processing().Data_Augmentation(self.Data_Aug_Folds)
     # ========================================== #
     def train(self):
+        training_data_path = 'Dataset/Train_32.pkl'
         try:            
-            with open('Dataset/Train_32.pkl', 'rb') as file:
+            with open(training_data_path, 'rb') as file:
                 train_data = pickle.load(file)
         except FileNotFoundError:
-            raise FileNotFoundError(f"Dataset not found at {self.dataset_path}. Please ensure the dataset is prepared.")
+            raise FileNotFoundError(f"Dataset not found at {training_data_path}. Please ensure the dataset is prepared.")
             
         Train_data_loader = DataLoader(CustomDataset(train_data), 
                                        config().batch_size, shuffle=True)
         # ------------ Import Denoizer ----------- #
         self.model = Noise_Pred()
-        optimizer = torch.optim.Adam(self.model.parameters(), lr = 5e-7)
+        optimizer = torch.optim.Adam(self.model.parameters(), lr = config().learning_rate)
         # -------------------------------------- #
         # Training loop
         for epoch in range(self.num_epochs):
@@ -64,6 +62,6 @@ class Training_Model():
         return self.model
 # ==================================================
 if __name__ == "__main__":
-    trainer = Training_Model(device=torch.device('cuda:0'), num_epochs=1, Data_Aug_Folds=1)
+    trainer = Training_Model(device=config().device, num_epochs=1, Data_Aug_Folds=1)
     trained_model = trainer.train()
 

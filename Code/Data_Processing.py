@@ -11,13 +11,11 @@ encode_CT = Functions("/Dataset/").encode_CT
 class Data_Processing():
     def __init__(self, 
                 pad_length = 32, 
-                Data_Aug_Folds = 2, 
                 alpha_C_dir = '/Dataset/PDB_alpha_C_',
                 seq_dir = 'Dataset/AA_Seq_main.csv'
                  ):
         self.seq_dir = seq_dir
         self.pad_length = pad_length
-        self.Data_Aug_Folds = Data_Aug_Folds
         self.alpha_C_dir = os.getcwd() + alpha_C_dir
         self.files = os.listdir(self.alpha_C_dir)
     # ========================================= #
@@ -95,7 +93,7 @@ class Data_Processing():
     # ========================================= #
     #             Augmenting Datasets           #
     # ========================================= #
-    def Data_Augmentation(self):
+    def Data_Augmentation(self, Data_Aug_Folds):
         backbone_file = 'Dataset/Backbone_Dict_32.pkl'
         features_file = 'Dataset/Backbone_Features_Dict_32.pkl'
         if not os.path.exists(backbone_file) and not os.path.exists(features_file):
@@ -108,7 +106,7 @@ class Data_Processing():
             normalized_coordinates = normalize_coordinates(backbone)
             features = Features_Dict[key]
             DATASET.append([normalized_coordinates, features])
-            for _ in range(self.Data_Aug_Folds):
+            for _ in range(Data_Aug_Folds):
                 rotated_coordinates = normalize_coordinates(random_rotation(backbone))
                 DATASET.append([rotated_coordinates, features])
         # ---------------------------------------
@@ -131,5 +129,5 @@ class Data_Processing():
                 pickle.dump(data, file)
 # ==================================================
 if __name__ == '__main__':
-    Data_Processing(Data_Aug_Folds = 5).Data_Augmentation()
+    Data_Processing().Data_Augmentation(Data_Aug_Folds = 5)
 

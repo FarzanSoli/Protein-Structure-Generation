@@ -11,12 +11,11 @@ from Functions import Frechet_distance, Sampling
 from Functions import Numpy_normalize, normalize_coordinates, CustomDataset
 from Functions import align_data_with_ground_truth, compute_reordered_coordinate
 # ============================================
-trainer = Training_Model(device=torch.device('cuda:0'), num_epochs=1, Data_Aug_Folds=1)
+trainer = Training_Model(num_epochs=1, Data_Aug_Folds=1)
 trained_model = trainer.train()
-
 # eta = 0 --> DDIM 
 # eta = 1 --> DDPM 
-X_samples, H_samples = Sampling(model, device=device, Samples = 1000, eta = 1)
+X_samples, H_samples = Sampling(trained_model, device=config().device, Samples = 1000, eta = 1)
 # ------------------------------------------ #
 #     Order based on positional embedding    #
 # ------------------------------------------ #
