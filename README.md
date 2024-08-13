@@ -29,7 +29,6 @@ Two pre-processed datasets are provided: a [backbone 3-D coordinates dictionary]
 
 To build the Docker image and run the container, which will automatically save training, validation and test datasets, follow these steps. Note that the process can be time-consuming and depends on your internet speed. These steps download the most recent dataset. 
 
-However, you can use the available dataset [alpha-carbon coordinates.][2] and run the "Data_Processing.py" code locally to save the training, validation and test datasets. 
 
 ```
 docker build -t peptidiff .
