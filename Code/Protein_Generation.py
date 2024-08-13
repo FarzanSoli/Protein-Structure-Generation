@@ -122,14 +122,18 @@ for i in range(len(DataLoader(CustomDataset(Test_dataset),
                                     generated_instances = H_samples_ordered_reshaped, 
                                     nearest_k=5))
 # =============================================
-density_coordinates = np.mean([x['density'] for x in density_coverage])
-coverage_coordinates = np.mean([x['coverage'] for x in density_coverage])
-density_features = np.mean([x['density'] for x in density_coverage_features])
-coverage_features = np.mean([x['coverage'] for x in density_coverage_features])
-Frechet_Coordinates = np.mean(Frechet_dist)
-Frechet_features = np.mean(Frechet_dist_features)
+density_coordinates = np.max([x['density'] for x in density_coverage])
+print(f"Density of Coordinates: {density_coordinates}")
+coverage_coordinates = np.max([x['coverage'] for x in density_coverage])
+print(f"Coverage of Coordinates: {coverage_coordinates}")
+density_features = np.max([x['density'] for x in density_coverage_features])
+print(f"Density of Features: {density_features}")
+coverage_features = np.max([x['coverage'] for x in density_coverage_features])
+print(f"Coverage of Features: {coverage_features}")
+Frechet_Coordinates = np.min(Frechet_dist)
+print(f"Frechet Distance of Coordinates: {Frechet_Coordinates}")
+Frechet_features = np.min(Frechet_dist_features)
+print(f"Frechet Distance of Features: {Frechet_features}")
 # =============================================
-
-
 
 
