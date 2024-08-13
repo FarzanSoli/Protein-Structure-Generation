@@ -9,10 +9,11 @@ padding = Functions("/Dataset/").padding
 encode_CT = Functions("/Dataset/").encode_CT
 # ========================================= #
 class Data_Processing():
-    def __init__(
-                self, pad_length = 32, Data_Aug_Folds = 2, 
-                 alpha_C_dir = '/Dataset/PDB_alpha_C_',
-                 seq_dir = 'Dataset/AA_Seq_main.csv'
+    def __init__(self, 
+                pad_length = 32, 
+                Data_Aug_Folds = 2, 
+                alpha_C_dir = '/Dataset/PDB_alpha_C_',
+                seq_dir = 'Dataset/AA_Seq_main.csv'
                  ):
         self.seq_dir = seq_dir
         self.pad_length = pad_length
@@ -22,7 +23,7 @@ class Data_Processing():
     # ========================================= #
     #               Backbone_Coordinates        #
     # ========================================= #
-    def Backbone_Coordinates(self, Directory, files):
+    def Backbone_Coordinates(self, pad_length, Directory, files):
         # files = os.listdir(Directory)
         Coordinates = {}
         Protein_backbone = {}
@@ -31,15 +32,15 @@ class Data_Processing():
             coordinate = pd.read_excel(Directory +'/'+file, 
                             names=['X_coordinate', 'Y_coordinate', 'Z_coordinate']).to_numpy()
                 # -------------------------------------------- #
-            if coordinate.shape[0] > self.pad_length:
-                cut_coordinate = coordinate[:self.pad_length, :]
+            if coordinate.shape[0] > pad_length:
+                cut_coordinate = coordinate[:pad_length, :]
                 cut_coordinate = normalize_coordinates(cut_coordinate)
                 Coordinates[file.replace('.xlsx','')] = cut_coordinate
                 # -------------------------------------------- #
                 Protein_backbone[file.replace('.xlsx','')] = cut_coordinate
                 # -------------------------------------------- #
             else:
-                coordinates_ = padding(self.pad_length, coordinate)
+                coordinates_ = padding(pad_length, coordinate)
                 coordinates_ = normalize_coordinates(coordinates_)
                 Coordinates[file.replace('.xlsx','')] = coordinates_
                 # -------------------------------------------- #
@@ -49,10 +50,10 @@ class Data_Processing():
     # ========================================= #
     #         Encoded Protein Backbone Seq      #
     # ========================================= #
-    def Encoded_Backbone_Seq(self, Directory):
+    def Encoded_Backbone_Seq(self, pad_length, Directory):
         # Directory = 'Dataset/AA_Seq_main.csv'
         AA_dataset = pd.read_csv(Directory)
-        Encoded_AA = encode_CT(self.pad_length, AA_dataset)
+        Encoded_AA = encode_CT(pad_length, AA_dataset)
         with open('Dataset/Backbone_Features_32.pkl', 'wb') as file:
             pickle.dump(Encoded_AA, file)
     # ========================================
@@ -130,5 +131,5 @@ class Data_Processing():
                 pickle.dump(data, file)
 # ==================================================
 if __name__ == '__main__':
-    Data_Processing(pad_length = 32, Data_Aug_Folds = 20).Data_Augmentation()
+    Data_Processing(Data_Aug_Folds = 5).Data_Augmentation()
 
