@@ -360,21 +360,6 @@ def random_rotation(x):
         raise Exception("Not implemented Error")
     return x
 # ==============================================
-def linear_beta_schedule(b_0, b_T, T):
-    return torch.linspace(b_0, b_T, T)
-# ==============================================
-def cosine_beta_schedule(b_0, b_T, T):
-    steps = torch.arange(T + 1, dtype=torch.float32) / T
-    alpha_bar = torch.cos((steps + 0.008) / 1.008 * torch.pi / 2) ** 2
-    betas = torch.clip(1 - alpha_bar[1:] / alpha_bar[:-1], 0.0, 0.999)
-    return torch.clip(betas, b_0, b_T)
-# ==============================================
-def sigmoid_beta_schedule(b_0, b_T, T, sigmoid_scaling=6):
-    betas = torch.linspace(-sigmoid_scaling, sigmoid_scaling, T)
-    betas = torch.sigmoid(betas)
-    betas = (b_T - b_0) * betas + b_0
-    return betas
-# ==============================================
 # Create DataLoader with shuffle enabled
 from torch.utils.data import Dataset
 class CustomDataset(Dataset):
@@ -390,4 +375,33 @@ def dynamic_weighting(loss1, loss2, log_var_x, log_var_f):
     precision2 = torch.exp(-log_var_f)
     weighted_loss = precision1 * loss1 + precision2 * loss2 + log_var_x + log_var_f
     return weighted_loss
-
+# ==============================================
+def Sampling(model, device, Samples = 1000, eta = 1, nearest_k = 5):
+    if eta == 1:
+        method = 'DDPM'
+    elif eta == 0:
+        method = 'DDIM'
+    # ----------------------------------------------- #
+    num_real_instances = Samples
+    # ----------------------------------------------- #
+    features_shape = (Samples, config().num_residues, config().num_features)
+    sample_features = torch.randn(*features_shape).to(device = device)
+    # ----------------------------------------------- #
+    coordinates_shape = (Samples, config().num_residues, 3)
+    sample_coordinate = torch.randn(*coordinates_shape).to(device = device)
+    # ----------------------------------------------- #
+    Diffsion = Diffusion_Process(model, coordinates_shape, features_shape, eta = eta)
+    X_samples = Diffsion.Sampling(sample_coordinate = sample_coordinate.to(device = device), 
+                           sample_features = sample_features.to(device = device),
+                           only_final = only_final)[0]
+    # -----------------------------------------
+    x_dir = 'Dataset/'+method+'/x_sample.pt'
+    torch.save(X_samples, x_dir)
+    # ==========================================
+    H_samples = Diffsion.Sampling(sample_coordinate = sample_coordinate.to(device = device), 
+                                   sample_features = sample_features.to(device = device),
+                                   only_final = only_final)[1]
+    # -----------------------------------------
+    h_dir = 'Dataset/'+method+'/h_sample.pt'
+    torch.save(H_samples, h_dir)
+    return X_samples, H_samples

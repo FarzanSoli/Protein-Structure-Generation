@@ -1,4 +1,3 @@
-""" ########## Processing Protein backbone coordinates and distance matrices ########## """
 import os
 import torch
 import pickle

@@ -1,4 +1,3 @@
-""" ########## Processing C-alpha files ########## """
 import os
 import wget
 import pickle
