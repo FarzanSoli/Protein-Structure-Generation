@@ -261,7 +261,7 @@ def align_data_with_ground_truth(real_data, gen_data):
     generated_data_reshaped = gen_data.reshape(-1, gen_data.shape[-1])
     aligned_gen = pca.transform(generated_data_reshaped)
     return normalize_coordinates(aligned_real), normalize_coordinates(aligned_gen)
- ========================================= 
+# ========================================= 
 def construct_graph(coords, threshold=0.1):
     """
     Construct a graph from 3D coordinates.

@@ -1,61 +1,20 @@
-import os
+""" ################## Sampling (Generation) ################## """  
 import torch
 import pickle
 import numpy as np
-from EGNN import *
-from tqdm import tqdm
 from Config import config
-from Training_Denoizer import Noise_Pred
 from EGNN import positional_embedding
 from torch.utils.data import DataLoader
+from Training_Model import Training_Model
 from Density_Coverage import compute_prdc
-from Data_Processing import Data_Processing
-from Functions import Frechet_distance, dynamic_weighting, Sampling
+from Functions import Frechet_distance, Sampling
 from Functions import Numpy_normalize, normalize_coordinates, CustomDataset
 from Functions import align_data_with_ground_truth, compute_reordered_coordinate
 # ============================================
 device = torch.device('cuda:0')
-length = config().num_residues
-# Enable anomaly detection
-torch.autograd.set_detect_anomaly(True)
-# ------------ Import Denoizer ----------- #
-only_final = True
-model = Noise_Pred()
-optimizer = torch.optim.Adam(model.parameters(), lr = 5e-7)
-# ------------- Load Dataset ------------- #
-if not os.path.exists('Dataset/Train_32.pkl'):
-    Data_Processing(pad_length = 32, Data_Aug_Folds = 2).Data_Augmentation()
-# ---------------------------------------- #
-with open('Dataset/Train_32.pkl', 'rb') as file:
-    train_data = pickle.load(file)
-Train_data_loader = DataLoader(CustomDataset(train_data), 
-                               config().batch_size, shuffle=True)
-# -------------------------------------- #
-log_var_x = nn.Parameter(torch.zeros(()))
-log_var_f = nn.Parameter(torch.zeros(()))
-# -------------------------------------- #
-num_epochs = 1
-# Training loop
-for epoch in range(num_epochs):
-    model.train()
-    total_loss = 0.0
-    for data in tqdm(Train_data_loader):
-        coordinates = data[0][:, :length, :].float().to(device)
-        features = data[1][:, :length, :].float().to(device)     
-        # Compute loss
-        loss_x, loss_f = model.loss_fn(coordinates, features)
-        loss_x = loss_x.detach()
-        loss_f = loss_f.detach()
-        weighted_loss = dynamic_weighting(loss_x, loss_f, log_var_x, log_var_f)       
-        # Zero gradients, perform a backward pass, and update the weights
-        optimizer.zero_grad()
-        weighted_loss.backward()
-        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)  
-        optimizer.step()
-        total_loss += weighted_loss.item() 
-    print(f'Epoch {epoch + 1}, Loss: {total_loss / len(Train_data_loader)}')
-
-""" ################## Sampling (Generation) ################## """    
+model = Training_Model().train()
+# eta = 0 --> DDIM 
+# eta = 1 --> DDPM 
 X_samples, H_samples = Sampling(model, device=device, Samples = 1000, eta = 1)
 # ------------------------------------------ #
 #     Order based on positional embedding    #
@@ -97,7 +56,9 @@ for i in range(len(DataLoader(CustomDataset(Test_dataset),
                            num_real_instances, shuffle=True)))[0][:,:length,:])
     real_coordinates_reshaped.append(
                            real_coordinates[-1].reshape(-1, real_coordinates[-1].shape[-1]))
-    # -----------------------------------------
+    # --------------------------------------- #
+    #     Aligning coordinates using PCA      #
+    # --------------------------------------- #
     aligned_real_, aligned_gen_ = align_data_with_ground_truth(
                                                             real_coordinates[-1].cpu().numpy(), 
                                                             X_samples_ordered)
@@ -106,8 +67,7 @@ for i in range(len(DataLoader(CustomDataset(Test_dataset),
     # -----------------------------------------
     Frechet_dist.append(Frechet_distance(aligned_real[-1], aligned_gen[-1]))
     # -----------------------------------------
-    density_coverage.append(       
-                            compute_prdc(
+    density_coverage.append(compute_prdc(
                             real_instances = aligned_real[-1],
                             generated_instances = aligned_gen[-1], 
                             nearest_k=nearest_k))
@@ -126,8 +86,7 @@ for i in range(len(DataLoader(CustomDataset(Test_dataset),
                                 real_features[-1].shape[1]*real_features[-1].shape[-1]))
     H_samples_ordered_reshaped = H_samples_ordered.reshape(H_samples_ordered.shape[0], 
                                                    H_samples_ordered.shape[1]*H_samples_ordered.shape[-1])
-    density_coverage_features.append(
-                                    compute_prdc(
+    density_coverage_features.append(compute_prdc(
                                     real_instances = real_features_reshaped[-1],
                                     generated_instances = H_samples_ordered_reshaped, 
                                     nearest_k=nearest_k))
@@ -139,7 +98,3 @@ coverage_features = np.mean([x['coverage'] for x in density_coverage_features])
 Frechet_Coordinates = np.mean(Frechet_dist)
 Frechet_features = np.mean(Frechet_dist_features)
 # =============================================
-
-
-
-
