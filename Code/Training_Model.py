@@ -12,9 +12,13 @@ class Training_Model():
     # ========================================== #
     def __init__(self, 
                  num_epochs,
-                 Data_Aug_Folds, 
+                 Data_Aug_Folds,
+                 lr,
+                 batch_size,
                  ):
         super(Training_Model, self).__init__()
+        self.lr = lr
+        self.batch_size = batch_size
         self.num_epochs = num_epochs
         self.device = config().device
         self.length = config().num_residues
@@ -35,10 +39,10 @@ class Training_Model():
             raise FileNotFoundError(f"Dataset not found at {training_data_path}. Please ensure the dataset is prepared.")
             
         Train_data_loader = DataLoader(CustomDataset(train_data), 
-                                       config().batch_size, shuffle=True)
+                                       self.batch_size, shuffle=True)
         # ------------ Import Denoizer ----------- #
         self.model = Noise_Pred()
-        optimizer = torch.optim.Adam(self.model.parameters(), lr = config().learning_rate)
+        optimizer = torch.optim.Adam(self.model.parameters(), lr = self.lr)
         # -------------------------------------- #
         # Training loop
         for epoch in range(self.num_epochs):
@@ -59,9 +63,17 @@ class Training_Model():
                 optimizer.step()
                 total_loss += weighted_loss.item() 
             print(f'Epoch {epoch + 1}, Loss: {total_loss / len(Train_data_loader)}')
-        return self.model
+        final_loss = total_loss / len(Train_data_loader)
+        return final_loss, self.model
 # ==================================================
 if __name__ == "__main__":
-    trainer = Training_Model(device=config().device, num_epochs=1, Data_Aug_Folds=1)
-    trained_model = trainer.train()
+    trainer = Training_Model(
+                            num_epochs=1,
+                            Data_Aug_Folds=1,
+                            lr=1e-6,
+                            batch_size=256
+                            )
+    final_loss, trained_model = trainer.train()
+
+
 

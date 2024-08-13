@@ -3,6 +3,7 @@ import torch
 import pickle
 import numpy as np
 from Config import config
+from itertools import product
 from EGNN import positional_embedding
 from torch.utils.data import DataLoader
 from Training_Model import Training_Model
@@ -11,8 +12,38 @@ from Functions import Frechet_distance, Sampling
 from Functions import Numpy_normalize, normalize_coordinates, CustomDataset
 from Functions import align_data_with_ground_truth, compute_reordered_coordinate
 # ============================================
-trainer = Training_Model(num_epochs=1, Data_Aug_Folds=1)
-trained_model = trainer.train()
+# Define the grid of hyperparameters
+param_grid = {
+    'num_epochs': [1, 3, 5],
+    'Data_Aug_Folds': [10, 20],
+    'lr': [1e-6, 5e-7, 1e-7],
+    'batch_size': [64, 128, 256],
+}
+# ------------------------------------------ #
+# Perform grid search
+best_loss = float('inf')
+best_params = None
+best_model = None
+# ------------------------------------------ #
+for params in product(*param_grid.values()):
+    param_dict = dict(zip(param_grid.keys(), params))
+    # -------------------------------------- #
+    trainer = Training_Model(
+        num_epochs=param_dict['num_epochs'],
+        Data_Aug_Folds=param_dict['Data_Aug_Folds'],
+        lr=param_dict['lr'],
+        batch_size=param_dict['batch_size']
+    )
+    final_loss, trained_model = trainer.train()
+
+    if final_loss < best_loss:
+        best_loss = final_loss
+        best_params = param_dict
+        best_model = trained_model
+
+print(f'Best parameters found: {best_params} with loss: {best_loss}')
+
+# ============================================
 # eta = 0 --> DDIM 
 # eta = 1 --> DDPM 
 X_samples, H_samples = Sampling(trained_model, device=config().device, Samples = 1000, eta = 1)

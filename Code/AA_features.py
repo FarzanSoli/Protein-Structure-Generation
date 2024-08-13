@@ -35,37 +35,19 @@ class features():
         self.TRP = {'P_1':5.40,'P_2':0.409,'vol':8.08,'H_1':0.81, 'H_2':-3.4,'P_i': 5.94,'alpha':0.32,'beta':0.42,'NCN':0.037977,'SASA':2.663}
         self.TYR = {'P_1':6.20,'P_2':0.298,'vol':6.47,'H_1':0.26, 'H_2':-2.3,'P_i': 5.66,'alpha':0.25,'beta':0.41,'NCN':0.023599,'SASA':2.368}
         # ================================================================================= #
-        self.AA_prop_keys = ['H_1', 'alpha', 'P_1','P_2','vol','beta','H_2','P_i','NCN','SASA']
+        self.AA_prop_keys = ['H_1', 'alpha']
         # --------------------------------------------------------------------------------- #
         self.AAs = [self.ALA, self.CYS, self.ASP, self.GLU, self.PHE, self.GLY, self.HIS,
                     self.ILE, self.LYS, self.LEU, self.MET, self.ASN, self.PRO, self.GLN, 
                     self.ARG, self.SER, self.THR, self.VAL, self.TRP,self.TYR]
         # --------------------------------------------------------------------------------- #
-        self.p_1, self.p_2, self.vol = [],[],[]
-        self.H_1, self.H_2, self.pi = [],[],[]
-        self.alpha, self.beta, self.ncn, self.sasa = [],[],[],[]
+        self.H_1, self.alpha = [],[]
         for i in range(len(self.AAs)):
-            self.pi.append(self.AAs[i]['P_i'])
-            self.p_1.append(self.AAs[i]['P_1'])
-            self.p_2.append(self.AAs[i]['P_2'])
-            self.vol.append(self.AAs[i]['vol'])
             self.H_1.append(self.AAs[i]['H_1'])
-            self.H_2.append(self.AAs[i]['H_2'])
-            self.ncn.append(self.AAs[i]['NCN'])
-            self.sasa.append(self.AAs[i]['SASA'])
-            self.beta.append(self.AAs[i]['beta'])
             self.alpha.append(self.AAs[i]['alpha'])
         # --------------------------------------------------------------------------------- #
         self.UNK = {'H_1':np.median(self.H_1),
-                    'P_1':np.median(self.p_1),
-                    'P_2':np.median(self.p_2), 
-                    'vol':np.median(self.vol),
                     'alpha':np.median(self.alpha),
-                    'beta':np.median(self.beta),
-                    'H_2':np.median(self.H_2),
-                    'P_i':np.median(self.pi),
-                    'SASA':np.median(self.sasa),
-                    'NCN':np.median(self.ncn),
                     }
         # ================================================================================= #
         self.AA_dict = {'A':0,'C':1,'D':2,'E':3,'F':4,'G':5,'H':6,'I':7, 'K':8,'L':9,'M':10,
