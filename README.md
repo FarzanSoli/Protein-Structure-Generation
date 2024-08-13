@@ -1,4 +1,4 @@
-# Dataset retrieval for training the diffusion model from scratch
+# PDB Dataset retrieval for training the diffusion model from scratch
 This repository contains the codes to retrieve 3-D coordinates of the protein backbone from [PDB database][1]. 
 ## To prepare the dataset for training PeptiDiff, follow these steps:
 
@@ -8,7 +8,7 @@ This repository contains the codes to retrieve 3-D coordinates of the protein ba
 
 3 - Utility Functions: The Functions.py script contains essential functions for data processing, normalization, training, and other related tasks.
 
-# PDB Dataset-Protein Backbone Generation
+# Pre-processed datasets for training the models.
 
 The raw datasets, [alpha-carbon coordinates.][2] and the [amino acid sequences of the proteins][3] are available for access.
  
@@ -46,3 +46,6 @@ docker build -t peptidiff .
 ```
 docker run --rm -v /path/to/host:/app/code/dataset peptidiff
 ```
+
+# Training and evaluation
+
