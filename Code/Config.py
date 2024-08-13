@@ -30,13 +30,6 @@ class config:
                  b_T = 2e-2, 
                  scheduling = 'cosine'):
         # ----------------------------------
-        super(config, self).__init__()
-        """
-        Args:
-            T: length of diffusion.
-            b_0: starting value in variance schedule.
-            b_T: ending value in variance schedule.
-        """
         self.T = T
         self.b_0 = b_0
         self.b_T = b_T

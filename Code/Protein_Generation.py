@@ -11,7 +11,7 @@ from Functions import Frechet_distance, Sampling
 from Functions import Numpy_normalize, normalize_coordinates, CustomDataset
 from Functions import align_data_with_ground_truth, compute_reordered_coordinate
 # ============================================
-trainer = Training_Model(num_epochs=1, Data_Aug_Folds=20)
+trainer = Training_Model(num_epochs=1, Data_Aug_Folds=1)
 trained_model = trainer.train()
 # eta = 0 --> DDIM 
 # eta = 1 --> DDPM 
@@ -19,7 +19,7 @@ X_samples, H_samples = Sampling(trained_model, device=config().device, Samples =
 # ------------------------------------------ #
 #     Order based on positional embedding    #
 # ------------------------------------------ #
-positional_embedding = positional_embedding(length, config().node_embed_size)
+positional_embedding = positional_embedding(config().length, config().node_embed_size)
 order = np.argsort(np.sum(positional_embedding.detach().cpu().numpy(), axis=1))
 # ------------------------------------------ #
 X_samples_ordered = []
@@ -53,7 +53,7 @@ for i in range(len(DataLoader(CustomDataset(Test_dataset),
                        num_real_instances, shuffle=True))):
     # -----------------------------------------
     real_coordinates.append(next(iter(DataLoader(CustomDataset(Test_dataset), 
-                           num_real_instances, shuffle=True)))[0][:,:length,:])
+                           num_real_instances, shuffle=True)))[0][:,:config().length,:])
     real_coordinates_reshaped.append(
                            real_coordinates[-1].reshape(-1, real_coordinates[-1].shape[-1]))
     # --------------------------------------- #
@@ -73,7 +73,7 @@ for i in range(len(DataLoader(CustomDataset(Test_dataset),
                             nearest_k=nearest_k))
     # =========================================
     real_features.append(next(iter(DataLoader(CustomDataset(Test_dataset), 
-                           num_real_instances, shuffle=True)))[1][:,:length,:])
+                           num_real_instances, shuffle=True)))[1][:,:config().length,:])
     real_features_reshaped.append(real_features[-1].reshape(-1, real_features[-1].shape[-1]))
     # -----------------------------------------
     H_samples_ordered_reshaped = H_samples_ordered.reshape(-1, H_samples_ordered.shape[-1])
