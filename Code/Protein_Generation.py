@@ -11,7 +11,7 @@ from Functions import Frechet_distance, Sampling
 from Functions import Numpy_normalize, normalize_coordinates, CustomDataset
 from Functions import align_data_with_ground_truth, compute_reordered_coordinate
 # ============================================
-trainer = Training_Model(num_epochs=1, Data_Aug_Folds=1)
+trainer = Training_Model(num_epochs=1, Data_Aug_Folds=20)
 trained_model = trainer.train()
 # eta = 0 --> DDIM 
 # eta = 1 --> DDPM 

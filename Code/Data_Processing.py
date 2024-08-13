@@ -129,5 +129,5 @@ class Data_Processing():
                 pickle.dump(data, file)
 # ==================================================
 if __name__ == '__main__':
-    Data_Processing().Data_Augmentation(Data_Aug_Folds = 5)
+    Data_Processing().Data_Augmentation(Data_Aug_Folds = 20)
 

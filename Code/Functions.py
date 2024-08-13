@@ -7,6 +7,7 @@ import gzip, shutil
 import pandas as pd 
 from torch import nn
 import networkx as nx
+from Config import config
 from AA_features import features
 from itertools import combinations
 from sklearn.decomposition import PCA
@@ -230,6 +231,7 @@ def Frechet_distance(Flatten_Real, Flatten_Generated):
     
     # Compute trace
     Trace_covar = np.trace(np.abs(Covar_Gen + Covar_Real - 2 * np.dot(sqrtm_Covar_Gen, sqrtm_Covar_Real)))
+    
     # Compute Frechet distance
     frech_dist = Sqrd_Euclid_Dist + Trace_covar
     return frech_dist
@@ -262,6 +264,18 @@ def align_data_with_ground_truth(real_data, gen_data):
     aligned_gen = pca.transform(generated_data_reshaped)
     return normalize_coordinates(aligned_real), normalize_coordinates(aligned_gen)
 # ========================================= 
+def generate_laplacian_noise(shape, loc=0, scale=1):
+    # Create a Laplace distribution object
+    laplace_dist = torch.distributions.laplace.Laplace(loc=loc, scale=scale)
+    # Sample noise from the Laplace distribution
+    noise = laplace_dist.sample(shape)
+    return noise
+# ========================================= 
+def generate_uniform_noise(shape, low=0, high=1):
+    # Generate uniform noise tensor
+    noise = torch.rand(shape) * (high - low) + low
+    return noise
+# ========================================= 
 def construct_graph(coords, threshold=0.1):
     """
     Construct a graph from 3D coordinates.
@@ -285,6 +299,45 @@ def construct_graph(coords, threshold=0.1):
         if dist < threshold:
             G.add_edge(u, v)
     return G
+# ========================================= 
+def graph_laplacian_spectrum(coords, threshold=0.1):
+    """
+    Compute the Laplacian spectrum of a graph.
+    
+    Parameters:
+    graph (networkx.Graph): Input graph
+    
+    Returns:
+    numpy.ndarray: The eigenvalues of the graph Laplacian
+    """
+    # Construct graph
+    G = construct_graph(coords, threshold)
+    # Compute Laplacian matrix
+    L = nx.laplacian_matrix(G).astype(float)
+    # Compute Laplacian spectrum (eigenvalues)
+    eigenvalues = np.linalg.eigvals(L.todense())
+    return np.sort(eigenvalues)
+# ========================================= 
+def compare_laplacian_spectra(coords_set1, coords_set2, threshold=0.1):
+    """
+    Compare the Laplacian spectra of two sets of 3D coordinates.
+
+    Parameters:
+    coords_set1 (numpy.ndarray): The first set of coordinates of shape (N, 32, 3)
+    coords_set2 (numpy.ndarray): The second set of coordinates of shape (N, 32, 3)
+    threshold (float): Threshold distance for edge connectivity
+
+    Returns:
+    float: A measure of similarity between the average spectra of the two sets of coordinates
+    """
+    spectra1 = [graph_laplacian_spectrum(coords, threshold) for coords in coords_set1]
+    spectra2 = [graph_laplacian_spectrum(coords, threshold) for coords in coords_set2]
+    
+    mean_spectrum1 = np.mean(spectra1, axis=0)
+    mean_spectrum2 = np.mean(spectra2, axis=0)
+    
+    return np.linalg.norm(mean_spectrum1 - mean_spectrum2)
+
 # =========================================
 class RandomRotation(nn.Module):
     # -------------------------------------------
@@ -377,7 +430,7 @@ def dynamic_weighting(loss1, loss2, log_var_x, log_var_f):
     weighted_loss = precision1 * loss1 + precision2 * loss2 + log_var_x + log_var_f
     return weighted_loss
 # ==============================================
-def Sampling(model, device, Samples = 1000, eta = 1, nearest_k = 5):
+def Sampling(model, device, Samples = 1000, eta = 1, nearest_k = 5, only_final = True):
     if eta == 1:
         method = 'DDPM'
     elif eta == 0:
@@ -406,3 +459,31 @@ def Sampling(model, device, Samples = 1000, eta = 1, nearest_k = 5):
     h_dir = 'Dataset/'+method+'/h_sample.pt'
     torch.save(H_samples, h_dir)
     return X_samples, H_samples
+
+
+# ========================================================================
+# from sklearn.decomposition import PCA
+# pca = PCA()
+# pca.fit(flat_real)
+# 
+# # Explained variance ratio
+# explained_variance_ratio = pca.explained_variance_ratio_
+# cumulative_explained_variance = np.cumsum(explained_variance_ratio)
+# 
+# # Plot cumulative explained variance
+# plt.figure(figsize=(8, 5))
+# plt.plot(range(1, len(cumulative_explained_variance) + 1), cumulative_explained_variance, marker='o', linestyle='--')
+# plt.title('Cumulative Explained Variance by PCA Components')
+# plt.xlabel('Number of Principal Components')
+# plt.ylabel('Cumulative Explained Variance')
+# plt.grid()
+# plt.show()
+# 
+# # Decide on the number of components based on the cumulative explained variance
+# for i, cumulative_variance in enumerate(cumulative_explained_variance):
+#     if cumulative_variance >= 0.95:  # Adjust the threshold as needed
+#         num_components = i + 1
+#         break
+# print(f'Number of components to retain 95% variance: {num_components}')
+# ========================================================================
+
