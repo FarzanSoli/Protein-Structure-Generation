@@ -10,6 +10,7 @@ import networkx as nx
 from AA_features import features
 from itertools import combinations
 from sklearn.decomposition import PCA
+from Sampling import Diffusion_Process
 # ========================================= #
 class Functions():
     def __init__(self, directory):
