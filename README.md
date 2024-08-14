@@ -66,7 +66,7 @@ docker build --no-cache -f Dockerfile_train -t training_inference_image .
 docker run --rm -it --gpus all training_inference_image
 ```
 
-This code trains the model and generates 1000 new instance (default - you can increase or decrease it based on the available computational resources) as well as density, coverage and Frechet distance metrics for both generated 3-D coordinates and physicochemical features. This framework implements both DDIM and DDPM which can be selected by chaning the parameter ($eta$) where $eta = 0$ reresents DDIM and $eta = 1$ denotes DDPM.
+This code trains the model and generates 1000 new instances (default - you can increase or decrease it based on the available computational resources) as well as density, coverage and Frechet distance metrics for both generated 3-D coordinates and physicochemical features. This framework implements both DDIM and DDPM which can be selected by changing the parameter ($eta$) where $eta = 0$ represents DDIM and $eta = 1$ denotes DDPM.
 
 
 
