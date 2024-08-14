@@ -1,3 +1,27 @@
+If you use this work please cite my work:
+
+'''
+@article{soleymani2023protinteract,
+  title={ProtInteract: A deep learning framework for predicting protein--protein interactions},
+  author={Soleymani, Farzan and Paquet, Eric and Viktor, Herna Lydia and Michalowski, Wojtek and Spinello, Davide},
+  journal={Computational and Structural Biotechnology Journal},
+  volume={21},
+  pages={1324--1348},
+  year={2023},
+  publisher={Elsevier}
+}
+'''
+
+'''
+@article{soleymani2024structure,
+  title={Structure-based protein and small molecule generation using EGNN and diffusion models: A comprehensive review},
+  author={Soleymani, Farzan and Paquet, Eric and Viktor, Herna Lydia and Michalowski, Wojtek},
+  journal={Computational and Structural Biotechnology Journal},
+  year={2024},
+  publisher={Elsevier}
+}
+'''
+
 # PDB Dataset retrieval for training the diffusion model from scratch
 This repository contains the codes to retrieve 3-D coordinates of the protein backbone from [PDB database][1]. 
 ## To prepare the dataset for training PeptiDiff, follow these steps:
