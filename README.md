@@ -1,3 +1,5 @@
+A detailed review of recent deep learning advancements, focusing on frameworks that integrate diffusion models and equivariant graph neural networks for protein and small molecule generation, is provided in this [paper][10].
+
 If you use this work please cite my work:
 
 ```
@@ -87,3 +89,5 @@ This code trains the model and generates 1000 new instance (default - you can in
 [8]: https://uottawa-my.sharepoint.com/personal/fsole078_uottawa_ca/_layouts/15/guestaccess.aspx?share=ERI8YR-laKVEtW75QRXNkCwBtPkJdPAVOjir-eAEXBQPVg&e=1VsVKC
 
 [9]: https://uottawa-my.sharepoint.com/personal/fsole078_uottawa_ca/_layouts/15/guestaccess.aspx?share=ESUT9WMvnnlNjGP3QUqFl1YBKZPS4eEobvftjXk4p0BiRA&e=JbR2j3
+
+[10]: https://www.sciencedirect.com/science/article/pii/S2001037024002228
