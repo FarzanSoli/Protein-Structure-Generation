@@ -1,15 +1,24 @@
 """ ################## Sampling (Generation) ################## """  
+import torch
 import pickle
 import numpy as np
 from Config import config
 from itertools import product
-from EGNN import positional_embedding
 from torch.utils.data import DataLoader
 from Training_Model import Training_Model
 from Density_Coverage import compute_prdc
 from Functions import Frechet_distance, Sampling
 from Functions import Numpy_normalize, normalize_coordinates, CustomDataset
 from Functions import align_data_with_ground_truth, compute_reordered_coordinate
+# ============================================
+def positional_embedding(N, node_embed_size, device=torch.device('cuda:0')):
+    res_index = torch.arange(N).float().to(device)
+    K = torch.arange(node_embed_size // 2, dtype=torch.float).to(device)
+    div_term = torch.exp(K * -(torch.log(torch.tensor(10000.0)) / (node_embed_size // 2))).to(device)
+    pos_embedding_sin = torch.sin(res_index[:, None] * div_term).to(device)
+    pos_embedding_cos = torch.cos(res_index[:, None] * div_term).to(device)
+    pos_embedd = torch.cat([pos_embedding_sin, pos_embedding_cos], dim=-1)
+    return pos_embedd
 # ============================================
 # Define the grid of hyperparameters
 param_grid = {
@@ -135,5 +144,7 @@ print(f"Frechet Distance of Coordinates: {Frechet_Coordinates}")
 Frechet_features = np.min(Frechet_dist_features)
 print(f"Frechet Distance of Features: {Frechet_features}")
 # =============================================
+
+
 
 

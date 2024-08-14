@@ -1,5 +1,4 @@
 import copy
-import tree
 import torch
 from Config import config
 # ====================================================
@@ -49,14 +48,12 @@ class Diffusion_Process():
             #  Physicochemical Features Corrupted  #
             # ------------------------------------ #
             sample_features['bb_corrupted'] = copy.copy(f_t)
-            sample_features = tree.map_structure(lambda f: f.to(config().device), 
-                                sample_features)
+            sample_features = {k: v.to(config().device) for k, v in sample_features.items()}
             # ------------------------------------ #
             #        Coordinates Corrupted         #
             # ------------------------------------ #
             sample_coordinates['bb_corrupted'] = copy.copy(x_t)
-            sample_coordinates = tree.map_structure(lambda x: x.to(config().device), 
-                                sample_coordinates)
+            sample_coordinates = {k: v.to(config().device) for k, v in sample_coordinates.items()}
             # ------------------------------------ #
             #       Predict Epsilon (Noise)        #
             # ------------------------------------ #

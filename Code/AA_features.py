@@ -1,9 +1,4 @@
-import os
-import wget
-import gzip as gz
 import numpy as np
-import pandas as pd
-from tqdm import tqdm
 # =============================================================================
 class features():
     def __init__(self):

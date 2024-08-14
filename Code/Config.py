@@ -18,12 +18,12 @@ def sigmoid_beta_schedule(b_0, b_T, T, sigmoid_scaling=6):
 class config:
     # -------------------------------------------
     def __init__(self, 
-                 T=20000, 
-                 eta = 0, # eta = 0 -- > DDIM, eta = 1 --> DDPM
-                 tau = 1, # accelerating DDIM 
+                 T=2000, 
+                 eta=0, 
+                 tau=1, 
                  lr = 5e-7,
-                 batch_size = 256, 
-                 num_layers = 4, 
+                 batch_size=256, 
+                 num_layers=4, 
                  node_embed_size = 32,
                  edge_embed_size = 32, 
                  b_0 = 1e-4, 
@@ -33,14 +33,14 @@ class config:
         self.T = T
         self.b_0 = b_0
         self.b_T = b_T
+        self.num_features = 2
+        self.num_residues = 32
         self.learning_rate = lr
         self.batch_size = batch_size
         self.num_layers = num_layers
         self.device = torch.device('cuda:0')
         self.edge_embed_size = edge_embed_size
         self.node_embed_size = node_embed_size
-        self.num_residues = 32
-        self.num_features = 2
         self.h_embed_size = node_embed_size# + self.num_features
         self.in_feature_size = self.h_embed_size*2
         # ----------------------------------

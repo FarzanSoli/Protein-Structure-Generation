@@ -1,9 +1,15 @@
 # Use a slim base Python image
-FROM python:3.10-slim as base
+FROM python:3.12-slim
 
 # Set environment variables to prevent .pyc files and enable unbuffered output
 ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=off \
+    PIP_DISABLE_PIP_VERSION_CHECK=on \
+    PIP_DEFAULT_TIMEOUT=100
+
+# Set the working directory
+WORKDIR /app
 
 # Install git, curl, and necessary build dependencies for Python packages
 RUN apt-get update && \
@@ -14,24 +20,17 @@ RUN apt-get update && \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Set the working directory
-WORKDIR /app/Code
-
 # Copy and install Python dependencies
 COPY requirements.txt /app/
 RUN python -m pip install --upgrade pip setuptools wheel && \
     pip install --no-cache-dir -r /app/requirements.txt
 
 # Copy the application files
-COPY Code /app/Code
+COPY Code ./Code
 
-# Copy the entry point script and make it executable
-COPY entrypoint_data.sh /entrypoint_data.sh
-RUN chmod +x /entrypoint_data.sh
-
-# Use a non-root user for security (optional but recommended)
+# Optional: Use a non-root user for security
 RUN useradd -m appuser && chown -R appuser /app
 USER appuser
 
-# Set the entry point
-ENTRYPOINT ["/entrypoint_data.sh"]
+# Specify the default command to run when the container starts
+CMD ["python", "Code/Fetch_Dataset.py"]

@@ -22,7 +22,7 @@ The [training][7], [validation][8] and [testig][9] datasets are available to dow
 In order to fetch the dataset from PDB database, follow these steps:
 
 ```
-docker build -f Dockerfile_data -t dataset_image .
+docker build --no-cache -f Dockerfile_data -t dataset_image .
 ```
 ```
 docker run --rm -v /path/to/host:/app/Code/Dataset dataset_image
@@ -31,21 +31,16 @@ docker run --rm -v /path/to/host:/app/Code/Dataset dataset_image
 
 If you'd like to use the pre-existing datasets mentioned above, please download the [backbone 3-D coordinates dictionary][5] and [backbone feature dictionary][6], then move them to the 'Dataset' folder within the 'Code' directory. After that, follow these steps to implement the training and inference processes:
 
+
 ```
-docker build -f Dockerfile_train -t training_inference_image .
-```
-```
-docker run --rm -v /path/to/host:/app/Code training_inference_image
+docker build --no-cache -f Dockerfile_train -t training_inference_image .
 ```
 
+```
+docker run --rm -it --gpus all training_inference_image
+```
 
-
-
-
-
-
-
-
+This code trains the model and generates 1000 new instance (default - you can increase or decrease it based on the available computational resources) as well as density, coverage and Frechet distance metrics for both generated 3-D coordinates and physicochemical features. This framework implements both DDIM and DDPM which can be selected by chaning the parameter ($eta$) where $eta = 0$ reresents DDIM and $eta = 1$ denotes DDPM.
 
 
 

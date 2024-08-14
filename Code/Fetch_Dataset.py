@@ -69,7 +69,6 @@ class Download_PDB:
     # ------------------------------------------
 
 
-
 """ ########## Extract_Coordinates ########## """
 def Extract_Coordinates(directory):
     print('*****************************************')
@@ -121,7 +120,7 @@ def Extract_Coordinates(directory):
 
 if __name__ == "__main__":
     main_url = 'https://files.wwpdb.org/pub/pdb/data/biounit/PDB/divided/'
-    directory = os.path.join(os.getcwd(), 'dataset', 'PDB_alpha_C')
+    directory = os.path.join(os.getcwd(), 'Dataset', 'PDB_alpha_C')
     print('======================================')
     print('Retrieving proteins from PDB database!')
     print('======================================')

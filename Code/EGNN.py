@@ -4,7 +4,6 @@ from torch import nn
 from Config import config
 # ==============================================
 device=torch.device('cuda:0')
-Seq_Len = config().num_residues
 pi = torch.tensor(math.pi).to(device)
 node_embed_size = config().node_embed_size
 edge_embed_size = config().edge_embed_size
