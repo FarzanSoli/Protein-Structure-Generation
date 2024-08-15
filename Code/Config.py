@@ -18,7 +18,7 @@ def sigmoid_beta_schedule(b_0, b_T, T, sigmoid_scaling=6):
 class config:
     # -------------------------------------------
     def __init__(self, 
-                 T=2000, 
+                 T=25000, 
                  eta=0, 
                  tau=1, 
                  lr = 5e-7,
@@ -39,9 +39,9 @@ class config:
         self.batch_size = batch_size
         self.num_layers = num_layers
         self.device = torch.device('cuda:0')
+        self.h_embed_size = node_embed_size
         self.edge_embed_size = edge_embed_size
         self.node_embed_size = node_embed_size
-        self.h_embed_size = node_embed_size# + self.num_features
         self.in_feature_size = self.h_embed_size*2
         # ----------------------------------
         if scheduling == 'linear':

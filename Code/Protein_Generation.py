@@ -51,6 +51,22 @@ for params in product(*param_grid.values()):
 
 print(f'Best parameters found: {best_params} with loss: {best_loss}')
 
+# ========================================== #
+# =============================================================================
+# def load_checkpoint(model, optimizer, checkpoint_path):
+#     checkpoint = torch.load(checkpoint_path)
+#     model.load_state_dict(checkpoint['model_state_dict'])
+#     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+#     epoch = checkpoint['epoch']
+#     loss = checkpoint['loss']
+#     return model, optimizer, epoch, loss
+# # ========================================== #
+# # Load the latest checkpoint
+# latest_checkpoint = 'checkpoints/checkpoint_epoch_X.pth'  # Replace X with the desired epoch
+# model, optimizer, start_epoch, loss = load_checkpoint(model, optimizer, latest_checkpoint)
+# =============================================================================
+
+
 # ============================================
 # eta = 0 --> DDIM 
 # eta = 1 --> DDPM 
@@ -66,12 +82,14 @@ for i in range(X_samples.shape[0]):
     X_samples_ordered.append(normalize_coordinates(
         compute_reordered_coordinate(X_samples.cpu().numpy()[i,:,:], order)))
 X_samples_ordered = np.array(X_samples_ordered)
+torch.save(X_samples_ordered, 'X_samples_ordered.pt')
 # ------------------------------------------ #
 H_samples_ordered = []
 for i in range(H_samples.shape[0]):
     H_samples_ordered.append(Numpy_normalize(
         compute_reordered_coordinate(H_samples.cpu().numpy()[i,:,:], order)))
 H_samples_ordered = np.array(H_samples_ordered)
+torch.save(H_samples_ordered, 'H_samples_ordered.pt')
 # ========================================== #
 #            Perfomance evaluation           #
 # ========================================== #

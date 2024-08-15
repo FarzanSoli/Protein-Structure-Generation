@@ -1,3 +1,4 @@
+import os
 import torch
 import pickle
 from EGNN import *
@@ -8,6 +9,21 @@ from Training_Denoizer import Noise_Pred
 from Data_Processing import Data_Processing
 from Functions import CustomDataset, dynamic_weighting
 # ============================================
+checkpoint_dir = os.path.join(os.getcwd(),'checkpoints')
+os.makedirs(checkpoint_dir, exist_ok=True)
+# ========================================== #
+def save_checkpoint(model, optimizer, epoch, loss, checkpoint_dir):
+    checkpoint = {
+        'epoch': epoch,
+        'model_state_dict': model.state_dict(),
+        'optimizer_state_dict': optimizer.state_dict(),
+        'loss': loss
+    }
+    checkpoint_path = os.path.join(checkpoint_dir, f'checkpoint_epoch_{epoch}.pth')
+    torch.save(checkpoint, checkpoint_path)
+    print(f"Checkpoint saved at {checkpoint_path}")
+# ========================================== #    
+
 class Training_Model():
     # ========================================== #
     def __init__(self, 
@@ -62,6 +78,7 @@ class Training_Model():
                 torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=1.0)  
                 optimizer.step()
                 total_loss += weighted_loss.item() 
+            save_checkpoint(self.model, optimizer, epoch, weighted_loss.item(), checkpoint_dir)
             print(f'Epoch {epoch + 1}, Loss: {total_loss / len(Train_data_loader)}')
         final_loss = total_loss / len(Train_data_loader)
         return final_loss, self.model
