@@ -11,7 +11,7 @@ import os, sys, gemmi, json
 from Functions import Functions
 # ========================================= #
 # Define the directory path
-directory = os.path.join(os.getcwd(), 'dataset', 'PDB_alpha_C')
+directory = os.path.join(os.getcwd(), 'dataset', 'PDB_alpha_C_')
 # Create the directory if it doesn't exist
 if not os.path.exists(directory):
     os.makedirs(directory)  # Use makedirs to create intermediate directories if needed
