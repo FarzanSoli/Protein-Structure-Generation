@@ -1,10 +1,13 @@
-import os
+""" ########## Processing C-alpha files ########## """
 import wget
 import pickle
 import requests
 import pdbreader
+import numpy as np
+import pandas as pd 
 from lxml import etree
 from io import StringIO
+import os, sys, gemmi, json
 from Functions import Functions
 # ========================================= #
 # Define the directory path
@@ -69,6 +72,7 @@ class Download_PDB:
     # ------------------------------------------
 
 
+
 """ ########## Extract_Coordinates ########## """
 def Extract_Coordinates(directory):
     print('*****************************************')
@@ -120,7 +124,7 @@ def Extract_Coordinates(directory):
 
 if __name__ == "__main__":
     main_url = 'https://files.wwpdb.org/pub/pdb/data/biounit/PDB/divided/'
-    directory = os.path.join(os.getcwd(), 'Dataset', 'PDB_alpha_C')
+    directory = os.path.join(os.getcwd(), 'Dataset', 'PDB_alpha_C_')
     print('======================================')
     print('Retrieving proteins from PDB database!')
     print('======================================')
@@ -131,4 +135,3 @@ if __name__ == "__main__":
         print("saving alpha-Carbon 3-D coordinates as dictionary")
         pickle.dump(Proteins,file)
         file.close()
-

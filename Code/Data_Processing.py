@@ -12,7 +12,7 @@ class Data_Processing():
     def __init__(self, 
                 pad_length = 32, 
                 alpha_C_dir = '/Dataset/PDB_alpha_C_',
-                seq_dir = 'Dataset/AA_Seq_main.csv'
+                seq_dir = '/Dataset/AA_Seq_main.csv'
                  ):
         self.seq_dir = seq_dir
         self.pad_length = pad_length
