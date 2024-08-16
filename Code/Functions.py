@@ -132,19 +132,6 @@ class Functions():
                 seq_id.append(id_)
                 sequences.append(''.join(sequence))
             return list(zip(seq_id, sequences))
-    # ========================================= #
-    #                 Standardize               #
-    # ========================================= #
-    def standardize(self, coordinates):
-        x_standard = (coordinates[:,0] - coordinates[:,0].mean())/(
-            np.std(coordinates[:,0]))
-        y_standard = (coordinates[:,1] - coordinates[:,1].mean())/(
-            np.std(coordinates[:,1]))
-        z_standard = (coordinates[:,2] - coordinates[:,2].mean())/(
-            np.std(coordinates[:,2]))
-        standard_coordinate = np.transpose(np.array(
-            [x_standard, y_standard, z_standard]))
-        return standard_coordinate
 # ========================================= #
 #                Numpy Normalize            #
 # ========================================= #
