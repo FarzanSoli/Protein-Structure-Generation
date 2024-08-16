@@ -71,36 +71,26 @@ class Functions():
     #               Encoding Amio acids         #
     # ========================================= #
     def Normalize_AA(self):
-        props = []
-        for t in range(len(features().AA_prop_keys)):
-            prop = []
-            for i in range(len(list(features().AA_dict))):
-                prop.append(features().Amino_acids[
-                    list(features().AA_dict)[i]][features().AA_prop_keys[t]])
-            props.append(np.array(prop))
+        Norm_props = {}
+        for key, value in features().Props.items():
+            Norm_props[key] = (value-np.min(value))/(np.max(value)-np.min(value))
         # ------------------------------------- #
-        Norm_props = []
-        for t in range(len(features().AA_prop_keys)):
-            Norm_props.append(
-                (props[t]-np.min(props[t]))/(np.max(props[t])-np.min(props[t])))
-        # ------------------------------------- #
-        AA_props = []
-        for t in range(len(list(features().AA_dict))):
-            aa_props = []
-            for i in range(len(features().AA_prop_keys)):
-                aa_props.append(Norm_props[i][t])
-            AA_props.append(aa_props)
-        return Norm_props, AA_props
+        Norm_AAs = {}
+        for symb, ind in features().AA_dict.items():
+            props = []
+            for key, value in Norm_props.items():
+                props.append(value[ind])
+            Norm_AAs[symb] = props
+
+        return Norm_props, Norm_AAs
     # ========================================= #
     #               Amino acid Encoding         #
     # ========================================= #
     def encode_CT(self, Pad_Length, dataframe):
-        encoding = dict(zip(list(features().AA_dict), self.Normalize_AA()[1]))
-        # ------------------------------------- #
         Encoded_AA = {}
         for index, row in dataframe.iterrows():
             Encoded_AA[row['PDB_ID']] = np.array(
-                [encoding[c.upper()] for c in row['Sequence']])
+                [self.Normalize_AA()[1][c.upper()] for c in row['Sequence']])
         # ------------------------------------- #
         encoded_AA = np.zeros((Pad_Length, len(features().AA_prop_keys)))
         Encoded_AA_padded = {}
@@ -459,4 +449,31 @@ def Sampling(model, device, Samples = 1000, eta = 1, nearest_k = 5, only_final =
     h_dir = 'Dataset/'+method+'/h_sample.pt'
     torch.save(H_samples, h_dir)
     return X_samples, H_samples
+
+
+# ========================================================================
+# from sklearn.decomposition import PCA
+# pca = PCA()
+# pca.fit(flat_real)
+# 
+# # Explained variance ratio
+# explained_variance_ratio = pca.explained_variance_ratio_
+# cumulative_explained_variance = np.cumsum(explained_variance_ratio)
+# 
+# # Plot cumulative explained variance
+# plt.figure(figsize=(8, 5))
+# plt.plot(range(1, len(cumulative_explained_variance) + 1), cumulative_explained_variance, marker='o', linestyle='--')
+# plt.title('Cumulative Explained Variance by PCA Components')
+# plt.xlabel('Number of Principal Components')
+# plt.ylabel('Cumulative Explained Variance')
+# plt.grid()
+# plt.show()
+# 
+# # Decide on the number of components based on the cumulative explained variance
+# for i, cumulative_variance in enumerate(cumulative_explained_variance):
+#     if cumulative_variance >= 0.95:  # Adjust the threshold as needed
+#         num_components = i + 1
+#         break
+# print(f'Number of components to retain 95% variance: {num_components}')
+# ========================================================================
 
