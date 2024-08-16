@@ -36,7 +36,7 @@ class features():
         # ------------------------------------- #
         self.AAs = list(self.Features.keys())
         # selected properties for this project
-        self.AA_prop_keys = ['H_1', 'alpha']
+        self.AA_prop_keys = ['H_1', 'alpha', 'SASA']
 
         # self.AA_prop_keys = [list(Values.keys()) for Keys,Values in self.Features.items()][0]
         # ------------------------------------- #

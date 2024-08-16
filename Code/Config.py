@@ -1,4 +1,5 @@
 import torch
+from AA_features import features
 # ==============================================
 def linear_beta_schedule(b_0, b_T, T):
     return torch.linspace(b_0, b_T, T)
@@ -33,7 +34,7 @@ class config:
         self.T = T
         self.b_0 = b_0
         self.b_T = b_T
-        self.num_features = 2
+        self.num_features = int(len(features().AA_prop_keys))
         self.num_residues = 32
         self.learning_rate = lr
         self.batch_size = batch_size

@@ -81,7 +81,6 @@ class Functions():
             for key, value in Norm_props.items():
                 props.append(value[ind])
             Norm_AAs[symb] = props
-
         return Norm_props, Norm_AAs
     # ========================================= #
     #               Amino acid Encoding         #
