@@ -11,12 +11,12 @@ encode_CT = Functions("/Dataset/").encode_CT
 class Data_Processing():
     def __init__(self, 
                 pad_length = 32, 
-                alpha_C_dir = '/Dataset/PDB_alpha_C_',
-                seq_dir = '/Dataset/AA_Seq_main.csv'
+                alpha_C_dir = os.path.join(os.getcwd(), 'Dataset', 'PDB_alpha_C_'),
+                seq_dir = os.path.join(os.getcwd(), 'Dataset', 'AA_Seq_main.csv'),
                  ):
         self.seq_dir = seq_dir
         self.pad_length = pad_length
-        self.alpha_C_dir = os.getcwd() + alpha_C_dir
+        self.alpha_C_dir = alpha_C_dir
         self.files = os.listdir(self.alpha_C_dir)
     # ========================================= #
     #               Backbone_Coordinates        #
@@ -70,7 +70,7 @@ class Data_Processing():
         file.close()
         # ==========================================
         # Backbone Features -> h
-        with open('Dataset/Backbone_Features_32_.pkl', 'rb') as file:
+        with open('Dataset/Backbone_Features_32.pkl', 'rb') as file:
             Features = pickle.load(file)
         # ==========================================
         IDs = torch.load('Dataset/Proteins_PDB_ID.pt')
