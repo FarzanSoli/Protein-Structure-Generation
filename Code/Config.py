@@ -59,5 +59,14 @@ class config:
                                           self.alpha_bars[:-1]])
         self.sigmas = torch.sqrt((1 - self.alpha_prev_bars) / (1 - self.alpha_bars)) * \
                       torch.sqrt(1 - (self.alpha_bars / self.alpha_prev_bars))
-        # --------------------------------------
 
+# ==============================================
+def positional_embedding(device=torch.device('cuda:0')):
+    res_index = torch.arange(config().num_residues).float().to(device)
+    K = torch.arange(config().node_embed_size // 2, dtype=torch.float).to(device)
+    div_term = torch.exp(K * -(torch.log(torch.tensor(10000.0)) / (config().node_embed_size // 2))).to(device)
+    pos_embedding_sin = torch.sin(res_index[:, None] * div_term).to(device)
+    pos_embedding_cos = torch.cos(res_index[:, None] * div_term).to(device)
+    pos_embedd = torch.cat([pos_embedding_sin, pos_embedding_cos], dim=-1)
+    return pos_embedd
+# ==============================================

@@ -22,9 +22,8 @@ def save_checkpoint(model, optimizer, epoch, loss, checkpoint_dir):
     checkpoint_path = os.path.join(checkpoint_dir, f'checkpoint_epoch_{epoch}.pth')
     torch.save(checkpoint, checkpoint_path)
     print(f"Checkpoint saved at {checkpoint_path}")
-# ========================================== #    
-
-class Training_Model():
+# ============================================== #
+class Training_Model:
     # ========================================== #
     def __init__(self, 
                  num_epochs,
