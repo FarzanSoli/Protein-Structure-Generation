@@ -46,7 +46,7 @@ class Training_Model:
         Data_Processing().Data_Augmentation(self.Data_Aug_Folds)
     # ========================================== #
     def train(self):
-        training_data_path = 'Dataset/Train_32.pkl'
+        training_data_path = './Dataset/Train_32.pkl'
         try:            
             with open(training_data_path, 'rb') as file:
                 train_data = pickle.load(file)
