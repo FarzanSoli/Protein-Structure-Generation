@@ -6,23 +6,11 @@ from itertools import product
 from torch.utils.data import DataLoader
 from Training_Model import Training_Model
 from Density_Coverage import compute_prdc
-from Config import config, positional_embedding
 from Functions import Frechet_distance, Sampling
+from Config import config, positional_embedding, load_checkpoint
 from Functions import Numpy_normalize, normalize_coordinates, CustomDataset
 from Functions import align_data_with_ground_truth, compute_reordered_coordinate
 # ========================================== #
-def load_checkpoint(model, optimizer, checkpoint_path):
-    checkpoint = torch.load(checkpoint_path)
-    model.load_state_dict(checkpoint['model_state_dict'])
-    optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-    epoch = checkpoint['epoch']
-    loss = checkpoint['loss']
-    return model, optimizer, epoch, loss
-# ========================================== #
-# Load the latest checkpoint
-latest_checkpoint = 'checkpoints/checkpoint_epoch_X.pth'  # Replace X with the desired epoch
-model, optimizer, start_epoch, loss = load_checkpoint(model, optimizer, latest_checkpoint)
-
 class Protein_Generation:
     def __init__(self, eta, Samples):
         super(Protein_Generation, self).__init__()
@@ -50,13 +38,17 @@ class Protein_Generation:
                 lr=param_dict['lr'],
                 batch_size=param_dict['batch_size']
             )
-            final_loss, self.trained_model = self.trainer.train()
+            final_loss, self.trained_model, optimizer = self.trainer.train()
 
             if final_loss < best_loss:
                 best_loss = final_loss
                 best_params = param_dict
-                best_model = trained_model
+                best_model = self.trained_model
         print(f'Best parameters found: {best_params} with loss: {best_loss}')
+        # ========================================== #
+        ### Load the latest checkpoint
+        # latest_checkpoint = 'checkpoints/checkpoint_epoch_X.pth'  # Replace X with the desired epoch
+        # model, optimizer, start_epoch, loss = load_checkpoint(self.trained_model, optimizer, latest_checkpoint)
         # ============================================
         # eta = 0 --> DDIM 
         # eta = 1 --> DDPM 
@@ -153,3 +145,4 @@ class Protein_Generation:
         Frechet_features = np.min(Frechet_dist_features)
         print(f"Frechet Distance of Features: {Frechet_features}")
         # =============================================
+

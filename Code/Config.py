@@ -70,3 +70,11 @@ def positional_embedding(device=torch.device('cuda:0')):
     pos_embedd = torch.cat([pos_embedding_sin, pos_embedding_cos], dim=-1)
     return pos_embedd
 # ==============================================
+def load_checkpoint(model, optimizer, checkpoint_path):
+    checkpoint = torch.load(checkpoint_path)
+    model.load_state_dict(checkpoint['model_state_dict'])
+    optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+    epoch = checkpoint['epoch']
+    loss = checkpoint['loss']
+    return model, optimizer, epoch, loss
+# ==============================================

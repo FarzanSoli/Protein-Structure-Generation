@@ -80,7 +80,7 @@ class Training_Model:
             save_checkpoint(self.model, optimizer, epoch, weighted_loss.item(), checkpoint_dir)
             print(f'Epoch {epoch + 1}, Loss: {total_loss / len(Train_data_loader)}')
         final_loss = total_loss / len(Train_data_loader)
-        return final_loss, self.model
+        return final_loss, self.model, optimizer
 # ==================================================
 if __name__ == "__main__":
     trainer = Training_Model(
