@@ -16,4 +16,4 @@ lxml
 networkx
 scipy
 pdbreader
-tree
+openpyxl
