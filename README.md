@@ -74,7 +74,7 @@ Similar works using EGNNs typically assign only positional and temporal embeddin
 
 ## Physicochemical properties of 20 amino acids
 
-| Amino acid    | Symbol | $alpha$-helix probability | Hydrophobicity | SASA  |
+| Amino acid    | Symbol | &alpha-helix probability | Hydrophobicity | SASA  |
 |---------------|--------|----------------------------|----------------|-------|
 | Alanine       | A      | 0.42                       | 0.62           | 1.181 |
 | Cysteine      | C      | 0.17                       | 0.29           | 1.461 |
