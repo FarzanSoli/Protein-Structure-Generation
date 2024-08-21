@@ -406,7 +406,7 @@ def dynamic_weighting(loss1, loss2, log_var_x, log_var_f):
     weighted_loss = precision1 * loss1 + precision2 * loss2 + log_var_x + log_var_f
     return weighted_loss
 # ==============================================
-def Sampling(model, device, Samples = 1000, eta = 1, nearest_k = 5, only_final = True):
+def Sampling(model, Samples, eta, device, nearest_k = 5, only_final = True):
     if eta == 1:
         method = 'DDPM'
     elif eta == 0:
@@ -435,31 +435,3 @@ def Sampling(model, device, Samples = 1000, eta = 1, nearest_k = 5, only_final =
     h_dir = 'Dataset/'+method+'/h_sample.pt'
     torch.save(H_samples, h_dir)
     return X_samples, H_samples
-
-
-# ========================================================================
-# from sklearn.decomposition import PCA
-# pca = PCA()
-# pca.fit(flat_real)
-# 
-# # Explained variance ratio
-# explained_variance_ratio = pca.explained_variance_ratio_
-# cumulative_explained_variance = np.cumsum(explained_variance_ratio)
-# 
-# # Plot cumulative explained variance
-# plt.figure(figsize=(8, 5))
-# plt.plot(range(1, len(cumulative_explained_variance) + 1), cumulative_explained_variance, marker='o', linestyle='--')
-# plt.title('Cumulative Explained Variance by PCA Components')
-# plt.xlabel('Number of Principal Components')
-# plt.ylabel('Cumulative Explained Variance')
-# plt.grid()
-# plt.show()
-# 
-# # Decide on the number of components based on the cumulative explained variance
-# for i, cumulative_variance in enumerate(cumulative_explained_variance):
-#     if cumulative_variance >= 0.95:  # Adjust the threshold as needed
-#         num_components = i + 1
-#         break
-# print(f'Number of components to retain 95% variance: {num_components}')
-# ========================================================================
-

@@ -1,4 +1,3 @@
-
 import torch
 import pickle
 import numpy as np
@@ -12,14 +11,15 @@ from Functions import Numpy_normalize, normalize_coordinates, CustomDataset
 from Functions import align_data_with_ground_truth, compute_reordered_coordinate
 # ========================================== #
 class Protein_Generation:
-    def __init__(self, eta, Samples):
+    def __init__(self, Samples = 1000, eta = 1):
         super(Protein_Generation, self).__init__()
         self.eta = eta
         self.Samples = Samples
+        self.device = config().device
         # Define the grid of hyperparameters
         self.param_grid = {
             'num_epochs': [1, 3, 5],
-            'Data_Aug_Folds': [10, 20],
+            'Data_Aug_Folds': [1, 10, 20],
             'lr': [1e-6, 5e-7, 1e-7],
             'batch_size': [64, 128, 256],
             }
@@ -52,8 +52,7 @@ class Protein_Generation:
         # ============================================
         # eta = 0 --> DDIM 
         # eta = 1 --> DDPM 
-        X_samples, H_samples = Sampling(self.trained_model, device = config().device, 
-                                        self.Samples = 1000, self.eta = 1)
+        X_samples, H_samples = Sampling(self.trained_model, self.Samples, self.eta, device = self.device)
         # ------------------------------------------ #
         #     Order based on positional embedding    #
         # ------------------------------------------ #
@@ -146,3 +145,6 @@ class Protein_Generation:
         print(f"Frechet Distance of Features: {Frechet_features}")
         # =============================================
 
+
+
+Protein_Generation(Samples = 1000, eta = 1)
