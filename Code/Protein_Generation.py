@@ -145,6 +145,5 @@ class Protein_Generation:
         print(f"Frechet Distance of Features: {Frechet_features}")
         # =============================================
 
-
-
-Protein_Generation(Samples = 1000, eta = 1)
+if __name__=='__main__':
+    Protein_Generation(Samples = 1000, eta = 1)
