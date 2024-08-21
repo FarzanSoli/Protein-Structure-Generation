@@ -98,6 +98,7 @@ Similar works using EGNNs typically assign only positional and temporal embeddin
 | Tyrosine      | Y      | 0.25                       | 0.26           | 2.368 |
 
 **Sources:**
+- [Protein–protein interaction prediction with deep learning: A comprehensive review][14]
 - $\alpha$-helix probability: [Holm et al., 1996][11]
 - Hydrophobicity: [Law et al., 2014][12]
 - Solvent-accessible surface area (SASA): [Ausaf et al., 2014][13]
@@ -129,3 +130,5 @@ Similar works using EGNNs typically assign only positional and temporal embeddin
 [12]: https://pubs.acs.org/doi/10.1021/jz402762h
 
 [13]: https://pubmed.ncbi.nlm.nih.gov/24678666/
+
+[14]: https://www.sciencedirect.com/science/article/pii/S2001037022004044
