@@ -45,7 +45,7 @@ Two pre-processed datasets are provided: a [backbone 3-D coordinates dictionary]
 The [training][7], [validation][8] and [testig][9] datasets are available to download. These datasets are augmented by randomly rotating the original datasets (20 times). 
 
 
-In order to fetch the dataset from PDB database, follow these steps:
+In order to fetch the dataset from the PDB database, follow these steps:
 
 ```
 docker build --no-cache -f Dockerfile_data -t dataset_image .
@@ -53,7 +53,7 @@ docker build --no-cache -f Dockerfile_data -t dataset_image .
 ```
 docker run --rm -v /path/to/host:/app/Code/Dataset dataset_image
 ```
-# Train the diffusion model and generate n-samples of new protein sequence and structure.
+# Train the diffusion model and generate n-samples of new protein sequences and structures.
 
 If you'd like to use the pre-existing datasets mentioned above, please download the [backbone 3-D coordinates dictionary][5] and [backbone feature dictionary][6], then move them to the 'Dataset' folder within the 'Code' directory. After that, follow these steps to implement the training and inference processes:
 
@@ -69,6 +69,7 @@ docker run --rm -it --gpus all training_inference_image --Samples 1000 --eta 1
 This code trains the model and generates 1000 new instances (default - you can increase or decrease it based on the available computational resources) as well as density, coverage and Frechet distance metrics for both generated 3-D coordinates and physicochemical features. This framework implements both DDIM and DDPM which can be selected by changing the parameter ($eta$) where $eta = 0$ represents DDIM and $eta = 1$ denotes DDPM.
 
 
+After completing the training and inference, import the saved features and utilize the Sequence_Builder.py script to construct potential sequences for the generated proteins. The framework creates sequences based on three physicochemical features: hydrophobicity, $\alpha$-helix probability, and solvent-accessible surface area (SASA). These features are assigned as node attributes within the EGNN architecture.
 
 
 
