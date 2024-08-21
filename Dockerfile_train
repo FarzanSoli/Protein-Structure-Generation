@@ -25,12 +25,18 @@ COPY requirements.txt /app/
 RUN python -m pip install --upgrade pip setuptools wheel && \
     pip install --no-cache-dir -r /app/requirements.txt
 
-# Copy the application files
+# Copy the entire Code folder, including the Dataset subfolder
 COPY Code ./Code
 
 # Optional: Use a non-root user for security
 RUN useradd -m appuser && chown -R appuser /app
 USER appuser
 
-# Specify the default command to run when the container starts
-CMD ["python", "Code/Protein_Generation.py"]
+# # Specify the default command to run when the container starts
+# CMD ["python", "Code/Protein_Generation.py"]
+
+# Set the entrypoint for the module
+ENTRYPOINT ["python", "Code/Protein_Generation.py"]
+
+# By default, run without arguments (modify as needed)
+CMD ["--Samples", "1000", "--eta", "1"]
