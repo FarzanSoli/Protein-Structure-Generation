@@ -69,7 +69,9 @@ docker run --rm -it --gpus all training_inference_image --Samples 1000 --eta 1
 This code trains the model and generates 1000 new instances (default - you can increase or decrease it based on the available computational resources) as well as density, coverage and Frechet distance metrics for both generated 3-D coordinates and physicochemical features. This framework implements both DDIM and DDPM which can be selected by changing the parameter ($eta$) where $eta = 0$ represents DDIM and $eta = 1$ denotes DDPM.
 
 
-After completing the training and inference, import the saved features and utilize the Sequence_Builder.py script to construct potential sequences for the generated proteins. The framework creates sequences based on three physicochemical features: hydrophobicity, $\alpha$-helix probability, and solvent-accessible surface area (SASA). These features are assigned as node attributes within the EGNN architecture.
+Similar works using EGNNs typically assign only positional and temporal embeddings as graph node embeddings. In contrast, this work assigns physicochemical features as node embeddings, which undergo a diffusion process, unlike positional and temporal embeddings (in this work, these features are assigned as node attributes - See EGNN code). After completing the training and inference, import the saved features and utilize the Sequence_Builder.py script to construct potential sequences for the generated proteins. The framework creates sequences based on three physicochemical features: hydrophobicity, $\alpha$-helix probability, and solvent-accessible surface area (SASA). These features are assigned as node attributes within the EGNN architecture.
+
+
 
 
 
