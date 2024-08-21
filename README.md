@@ -42,7 +42,7 @@ The "AA_features.py" code includes physicochemical features of the 20 standard a
 
 Two pre-processed datasets are provided: a [backbone 3-D coordinates dictionary][5] and a [backbone feature dictionary][6] comprising physicochemical properties. For each protein, the data in both dictionaries are normalized and padded to a specified length to ensure uniformity across the dataset.
 
-The [training][7], [validation][8] and [testig][9] datasets are available to download. These datasets are augmented by randomly rotating the original datasets (20 times). 
+The [training][7], [validation][8] and [testig][9] datasets are available to download. Leveraging the E(3) equivariance of the framework, the dataset is augmented by applying random rotations to the existing samples.
 
 
 In order to fetch the dataset from the PDB database, follow these steps:
