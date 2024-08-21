@@ -98,9 +98,9 @@ Similar works using EGNNs typically assign only positional and temporal embeddin
 | Tyrosine      | Y      | 0.25                       | 0.26           | 2.368 |
 
 **Sources:**
-- $\alpha$-helix probability: [Holm et al., 1996][https://pubmed.ncbi.nlm.nih.gov/8662544/]
-- Hydrophobicity: [Law et al., 2014][https://pubs.acs.org/doi/10.1021/jz402762h]
-- Solvent-accessible surface area (SASA): [Ausaf et al., 2014][https://pubmed.ncbi.nlm.nih.gov/24678666/]
+- $\alpha$-helix probability: [Holm et al., 1996][11]
+- Hydrophobicity: [Law et al., 2014][12]
+- Solvent-accessible surface area (SASA): [Ausaf et al., 2014][13]
 
 
 
@@ -123,3 +123,9 @@ Similar works using EGNNs typically assign only positional and temporal embeddin
 [9]: https://uottawa-my.sharepoint.com/personal/fsole078_uottawa_ca/_layouts/15/guestaccess.aspx?share=ESUT9WMvnnlNjGP3QUqFl1YBKZPS4eEobvftjXk4p0BiRA&e=JbR2j3
 
 [10]: https://www.sciencedirect.com/science/article/pii/S2001037024002228
+
+[11]: https://pubmed.ncbi.nlm.nih.gov/8662544/
+
+[12]: https://pubs.acs.org/doi/10.1021/jz402762h
+
+[13]: https://pubmed.ncbi.nlm.nih.gov/24678666/
