@@ -51,7 +51,7 @@ In order to fetch the dataset from the PDB database, follow these steps:
 docker build --no-cache -f Dockerfile_data -t dataset_image .
 ```
 ```
-docker run --rm -v /path/to/host:/app/Code/Dataset dataset_image
+docker run --rm -v /path/to/host:/app/Dataset dataset_image
 ```
 # Train the diffusion model and generate n-samples of new protein sequences and structures.
 

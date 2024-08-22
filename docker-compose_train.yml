@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  peptidiff:
+    image: training_inference_image
+    build:
+      context: .
+      dockerfile: ./Dockerfile_train
