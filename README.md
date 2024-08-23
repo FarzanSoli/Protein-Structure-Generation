@@ -104,7 +104,8 @@ Similar works using EGNNs typically assign only positional and temporal embeddin
 - Hydrophobicity: [Law et al., 2014][12]
 - Solvent-accessible surface area (SASA): [Ausaf et al., 2014][13]
 
-
+The proposed framework enables the simultaneous generation of protein sequences and their corresponding 3-D backbone coordinates. To validate the generated structures, 
+one can compare the generated 3-D coordinates with \href{https://github.com/FarzanSoli/secondary_structure_prediction.git}{the predicted secondary structure.}
 
 [1]: https://files.wwpdb.org/pub/pdb/data/biounit/PDB/divided/
 
