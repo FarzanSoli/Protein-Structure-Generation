@@ -9,11 +9,9 @@ from lxml import etree
 from io import StringIO
 from Functions import Functions
 # ========================================= #
-# Define the directory path
 directory = os.path.join(os.getcwd(), 'dataset', 'PDB_alpha_C_')
-# Create the directory if it doesn't exist
 if not os.path.exists(directory):
-    os.makedirs(directory)  # Use makedirs to create intermediate directories if needed
+    os.makedirs(directory)
     print('The new directory is created:', directory)
 # ========================================= #
 """ ########## Download PDB files ########## """
@@ -69,8 +67,6 @@ class Download_PDB:
                 else:
                     wget.download(main_url+url+code, directory)
     # ------------------------------------------
-
-
 
 """ ########## Extract_Coordinates ########## """
 def Extract_Coordinates(directory):
